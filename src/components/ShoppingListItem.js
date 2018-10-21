@@ -46,7 +46,7 @@ class ShoppingListItem extends Component {
       />
     ) : (
       <div
-        className={`form-control ${checkedStyle} clickable`}
+        className={`form-control ${checkedStyle} clickable h-auto`}
         onClick={this.toggleItemChecked}
       >
         {item.name}
