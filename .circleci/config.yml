@@ -25,22 +25,40 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      - run: npm run test
+      - run: npm run build
 
       - persist_to_workspace:
-          root: /
+          root: workspace
           paths:
-            - *
+            - ./*
+
+  test:
+    <<: *defaults
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: npm install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: npm run test
 
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
-          at: /
-
+          at: workspace
       - run:
           name: Deploy Master to Firebase
-          command: npm run deploy -- --token=$FIREBASE_DEPLOY_TOKEN
+          command: cd workspace && npm run deploy -- --token=$FIREBASE_DEPLOY_TOKEN
 
 workflows:
   version: 2
@@ -50,6 +68,7 @@ workflows:
       - deploy:
           requires:
             - build
+            - test
           filters:
             branches:
               only: master
