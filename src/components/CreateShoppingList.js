@@ -21,6 +21,7 @@ class CreateShoppingList extends Component {
             placeholder="List name"
             className="form-control"
             name="name"
+            autoComplete="off"
           />
           <div className="input-group-append">
             <button type="submit" className="btn btn-primary">
