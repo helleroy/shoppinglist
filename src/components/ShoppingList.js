@@ -78,31 +78,35 @@ class ShoppingList extends Component {
             </div>
           </form>
         </main>
-        <footer className="card-footer d-flex justify-content-between">
-          <form
-            onSubmit={this.handleNewSharedUser}
-            className="input-group col-6 p-0"
-          >
-            <input
-              type="email"
-              name="email"
-              placeholder="User email"
-              className="form-control"
-            />
-            <div className="input-group-append">
-              <button type="submit" className="btn btn-secondary">
-                Share
-              </button>
-            </div>
-          </form>
-          {canDelete && (
-            <button
-              className="btn btn-outline-danger"
-              onClick={() => listService.removeShoppingList(list)}
+        <footer className="card-footer py-0 pb-3">
+          <div className="row justify-content-between">
+            <form
+              onSubmit={this.handleNewSharedUser}
+              className="input-group col-sm-6 mt-3"
             >
-              Delete list
-            </button>
-          )}
+              <input
+                type="email"
+                name="email"
+                placeholder="User email"
+                className="form-control"
+              />
+              <div className="input-group-append">
+                <button type="submit" className="btn btn-secondary">
+                  Share
+                </button>
+              </div>
+            </form>
+            {canDelete && (
+              <div className="col-sm-3 mt-3">
+                <button
+                  className="btn btn-outline-danger col-sm"
+                  onClick={() => listService.removeShoppingList(list)}
+                >
+                  Delete list
+                </button>
+              </div>
+            )}
+          </div>
         </footer>
       </div>
     );
