@@ -46,7 +46,7 @@ class ShoppingListItem extends Component {
       />
     ) : (
       <div
-        className={`form-control ${checkedStyle}`}
+        className={`form-control ${checkedStyle} clickable`}
         onClick={this.toggleItemChecked}
       >
         {item.name}
@@ -81,7 +81,7 @@ class ShoppingListItem extends Component {
     return (
       <form className="input-group" onSubmit={this.submitItemChange}>
         <div
-          className="input-group-prepend col-1 p-0"
+          className="input-group-prepend col-1 p-0 clickable"
           onClick={this.toggleItemChecked}
         >
           {item.checked ? (
