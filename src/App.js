@@ -10,23 +10,27 @@ class App extends Component {
   constructor() {
     super();
 
-    this.state = { ownedShoppingLists: [], sharedShoppingLists: [] };
+    this.state = {
+      user: null,
+      ownedShoppingLists: [],
+      sharedShoppingLists: []
+    };
   }
 
   componentDidMount() {
     authenticationService.handleAuthStateChanged(async user => {
       if (user) {
-        await userService.updateUser(user);
-        await listService.ownedShoppingListListener(user, ownedShoppingLists =>
+        this.setState({ user });
+
+        userService.updateUser(user);
+        listService.ownedShoppingListListener(user, ownedShoppingLists =>
           this.setState({ ownedShoppingLists })
         );
-        await listService.sharedShoppingListsListener(
-          user,
-          sharedShoppingLists => this.setState({ sharedShoppingLists })
+        listService.sharedShoppingListsListener(user, sharedShoppingLists =>
+          this.setState({ sharedShoppingLists })
         );
-        this.setState({ user });
       } else {
-        this.setState({ user: undefined });
+        this.setState({ user: null });
       }
     });
   }
