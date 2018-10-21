@@ -50,7 +50,7 @@ class ShoppingList extends Component {
     const canDelete = signedInUser.uid === list.owner.id;
 
     return (
-      <div className="card">
+      <div className="card mb-3">
         <header className="card-header">
           <ShoppingListHeader list={list} signedInUser={signedInUser} />
         </header>
@@ -81,7 +81,7 @@ class ShoppingList extends Component {
         <footer className="card-footer d-flex justify-content-between">
           <form
             onSubmit={this.handleNewSharedUser}
-            className="input-group col-5 p-0"
+            className="input-group col-6 p-0"
           >
             <input
               type="email"
@@ -90,20 +90,19 @@ class ShoppingList extends Component {
               className="form-control"
             />
             <div className="input-group-append">
-              <input
-                type="submit"
-                value="Share"
-                className="btn btn-secondary"
-              />
+              <button type="submit" className="btn btn-secondary">
+                Share
+              </button>
             </div>
           </form>
-          <button
-            className="btn btn-outline-danger"
-            onClick={() => listService.removeShoppingList(list)}
-            disabled={!canDelete}
-          >
-            Delete list
-          </button>
+          {canDelete && (
+            <button
+              className="btn btn-outline-danger"
+              onClick={() => listService.removeShoppingList(list)}
+            >
+              Delete list
+            </button>
+          )}
         </footer>
       </div>
     );

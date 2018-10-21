@@ -9,13 +9,14 @@ class ShoppingListHeader extends Component {
       <div>
         <div>
           <h2 className="display-4">{list.name}</h2>
-          <h4 className="lead">
-            Created by {list.owner.displayName}
+          <h4 className="lead d-inline-flex align-items-center">
+            Created by
             <img
               src={list.owner.photoURL}
               alt={`${list.owner.displayName}`}
-              className="profile-image-sm"
+              className="profile-image-sm mx-2"
             />
+            {list.owner.displayName}
           </h4>
         </div>
         <div>

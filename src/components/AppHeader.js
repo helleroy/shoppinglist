@@ -8,10 +8,10 @@ class AppHeader extends Component {
 
     return (
       <div className="row justify-content-between py-3">
-        <div className="col-4">
+        <div className="col-6">
           {shoppingLists.length > 0 && <CreateShoppingList user={user} />}
         </div>
-        <div className="col-4">
+        <div className="col-5">
           <UserStatus user={user} />
         </div>
       </div>

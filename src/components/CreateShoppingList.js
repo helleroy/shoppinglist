@@ -6,8 +6,10 @@ class CreateShoppingList extends Component {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    const name = formData.get("name");
+    event.target.reset();
 
-    await listService.createShoppingList(this.props.user, formData.get("name"));
+    await listService.createShoppingList(this.props.user, name);
   };
 
   render() {

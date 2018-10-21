@@ -8,16 +8,18 @@ class SharedUser extends Component {
     const canRemove =
       list.owner.id === signedInUser.uid || sharedUser.id === signedInUser.uid;
 
+    const firstName = sharedUser.displayName.split(" ")[0];
+
     return (
       <div key={sharedUser.id} className="input-group">
         <div className="input-group-prepend">
           <div className="input-group-text d-flex align-items-center">
-            <span className="mr-2">{sharedUser.displayName}</span>
             <img
               src={sharedUser.photoURL}
               alt={`${sharedUser.displayName}`}
-              className="profile-image-sm"
+              className="profile-image-sm mr-2"
             />
+            <span>{firstName}</span>
           </div>
         </div>
         <div className="input-group-append">
