@@ -14,21 +14,21 @@ class UserStatus extends Component {
     const { user } = this.props;
 
     return (
-      <div className="d-flex justify-content-end align-items-center">
+      <div className="d-flex justify-content-start align-items-center">
         {user ? (
           <Fragment>
-            <img
-              src={user.photoURL}
-              alt={`${user.displayName}`}
-              className="profile-image-lg mr-2"
-            />
-            <span className="header-item mr-2">{user.displayName}</span>
             <button
               className="header-item btn btn-outline-danger"
               onClick={this.signOut}
             >
               Sign out
             </button>
+            <img
+              src={user.photoURL}
+              alt={`${user.displayName}`}
+              className="profile-image-lg ml-2"
+            />
+            <span className="header-item ml-2">{user.displayName}</span>
           </Fragment>
         ) : (
           <Fragment>
