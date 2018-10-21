@@ -17,7 +17,7 @@ class ShoppingList extends Component {
   }
 
   componentWillUnmount() {
-    listService.removeItemListener(this.props.list);
+    listService.unsubscribeItemListener(this.props.list);
   }
 
   handleNewSharedUser = async event => {

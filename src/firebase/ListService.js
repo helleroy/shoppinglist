@@ -141,10 +141,7 @@ export class ListService {
   }
 
   ownedShoppingListListener(user, callback) {
-    if (this._ownedShoppingListUnsubscriber) {
-      this._ownedShoppingListUnsubscriber();
-      this._ownedShoppingListUnsubscriber = null;
-    }
+    this.unsubscribeOwnedShoppingListListener();
 
     try {
       this._ownedShoppingListUnsubscriber = this._db
@@ -165,10 +162,7 @@ export class ListService {
   }
 
   sharedShoppingListsListener(user, callback) {
-    if (this._sharedShoppingListUnsubscriber) {
-      this._sharedShoppingListUnsubscriber();
-      this._sharedShoppingListUnsubscriber = null;
-    }
+    this.unsubscribeSharedShoppingListListener();
 
     this._sharedShoppingListUnsubscriber = this._db
       .collection("shoppinglists")
@@ -185,7 +179,7 @@ export class ListService {
   }
 
   itemListener(shoppingList, callback) {
-    this.removeItemListener(shoppingList);
+    this.unsubscribeItemListener(shoppingList);
 
     try {
       this._itemUnsubcribers[shoppingList.id] = this._db
@@ -200,7 +194,21 @@ export class ListService {
     }
   }
 
-  removeItemListener(shoppingList) {
+  unsubscribeOwnedShoppingListListener() {
+    if (this._ownedShoppingListUnsubscriber) {
+      this._ownedShoppingListUnsubscriber();
+      this._ownedShoppingListUnsubscriber = null;
+    }
+  }
+
+  unsubscribeSharedShoppingListListener() {
+    if (this._sharedShoppingListUnsubscriber) {
+      this._sharedShoppingListUnsubscriber();
+      this._sharedShoppingListUnsubscriber = null;
+    }
+  }
+
+  unsubscribeItemListener(shoppingList) {
     const shoppingListId = shoppingList.id;
     if (this._itemUnsubcribers[shoppingListId]) {
       this._itemUnsubcribers[shoppingListId]();

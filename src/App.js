@@ -31,6 +31,12 @@ class App extends Component {
     });
   }
 
+  componentWillUnmount() {
+    listService.unsubscribeSharedShoppingListListener();
+    listService.unsubscribeOwnedShoppingListListener();
+    authenticationService.unsubscribeAuthStateChangedListener();
+  }
+
   render() {
     const { user, ownedShoppingLists, sharedShoppingLists } = this.state;
 
