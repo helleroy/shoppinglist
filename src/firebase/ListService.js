@@ -78,11 +78,13 @@ export class ListService {
     }
   }
 
-  async updateSharedWith(shoppingList, sharedWith) {
+  async updateSharedWith(shoppingList, users) {
     try {
+      const userIds = users.map(u => u.id);
+
       return this._db
         .doc(`shoppinglists/${shoppingList.id}`)
-        .update({ sharedWith });
+        .update({ sharedWith: userIds });
     } catch (error) {
       console.log(error);
     }
@@ -106,9 +108,7 @@ export class ListService {
     if (user) {
       const users = addToList(shoppingList.sharedWith, user);
 
-      const userIds = users.map(u => u.id);
-
-      await this.updateSharedWith(shoppingList, userIds);
+      await this.updateSharedWith(shoppingList, users);
     }
   }
 
@@ -118,9 +118,9 @@ export class ListService {
     await this.updateSharedWith(shoppingList, users);
   }
 
-  async populateSharedWith(shoppingLists) {
+  async populateUserData(shoppingLists) {
     const userByIdPromises = _.chain(shoppingLists)
-      .flatMap(list => list.sharedWith)
+      .flatMap(list => [...list.sharedWith, list.owner])
       .uniq()
       .map(userId => this._userService.getUserById(userId))
       .value();
@@ -130,11 +130,13 @@ export class ListService {
     const uniqueUserMap = _.keyBy(uniqueUsers, "id");
 
     return shoppingLists.map(list => {
-      const newList = { ...list };
-      newList.sharedWith = list.sharedWith.map(userId => {
-        return uniqueUserMap[userId];
-      });
-      return newList;
+      return {
+        ...list,
+        owner: uniqueUserMap[list.owner],
+        sharedWith: list.sharedWith.map(userId => {
+          return uniqueUserMap[userId];
+        })
+      };
     });
   }
 
@@ -151,7 +153,7 @@ export class ListService {
         .onSnapshot(async querySnapshot => {
           const shoppingLists = querySnapshot.docs.map(docWithId);
 
-          const shoppingListsWithUsers = await this.populateSharedWith(
+          const shoppingListsWithUsers = await this.populateUserData(
             shoppingLists
           );
 
@@ -174,7 +176,7 @@ export class ListService {
       .onSnapshot(async querySnapshot => {
         const shoppingLists = querySnapshot.docs.map(docWithId);
 
-        const shoppingListsWithUsers = await this.populateSharedWith(
+        const shoppingListsWithUsers = await this.populateUserData(
           shoppingLists
         );
 

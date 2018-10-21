@@ -21,7 +21,7 @@ class UserStatus extends Component {
             <img
               src={user.photoURL}
               alt={`${user.displayName}`}
-              className="header-profile-image mr-2"
+              className="profile-image-lg mr-2"
             />
             <button
               className="header-item btn btn-outline-danger"

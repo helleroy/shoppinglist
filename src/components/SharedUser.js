@@ -13,7 +13,7 @@ class SharedUser extends Component {
             <img
               src={sharedUser.photoURL}
               alt={`${sharedUser.displayName}`}
-              className="shared-user-profile-image"
+              className="profile-image-sm"
             />
           </div>
         </div>

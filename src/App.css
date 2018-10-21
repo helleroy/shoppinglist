@@ -1,11 +1,11 @@
-.header-profile-image {
+.profile-image-lg {
   height: 2rem;
   width: 2rem;
   border-radius: 1rem;
 }
 
-.shared-user-profile-image {
+.profile-image-sm {
   height: 1.5rem;
   width: 1.5rem;
-  border-radius: 2rem;
+  border-radius: 1rem;
 }

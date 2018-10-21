@@ -9,7 +9,14 @@ class ShoppingListHeader extends Component {
       <div>
         <div>
           <h2 className="display-4">{list.name}</h2>
-          <h4 className="lead">Created by {list.owner}</h4>
+          <h4 className="lead">
+            Created by {list.owner.displayName}
+            <img
+              src={list.owner.photoURL}
+              alt={`${list.owner.displayName}`}
+              className="profile-image-sm"
+            />
+          </h4>
         </div>
         <div>
           {list.sharedWith.length > 0 && (
