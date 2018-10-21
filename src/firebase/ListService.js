@@ -78,6 +78,18 @@ export class ListService {
     }
   }
 
+  async updateListName(shoppingList, name) {
+    if (name.length === 0) {
+      return;
+    }
+
+    try {
+      return this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateSharedWith(shoppingList, users) {
     try {
       const userIds = users.map(u => u.id);

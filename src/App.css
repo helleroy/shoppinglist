@@ -13,3 +13,10 @@
 .clickable {
   cursor: pointer;
 }
+
+.discreet-input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  line-height: normal;
+}
