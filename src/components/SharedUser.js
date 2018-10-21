@@ -23,13 +23,14 @@ class SharedUser extends Component {
           </div>
         </div>
         <div className="input-group-append">
-          <button
-            className="btn btn-danger"
-            onClick={() => listService.removeUserFromList(list, sharedUser)}
-            disabled={!canRemove}
-          >
-            <i className="fas fa-times" />
-          </button>
+          {canRemove && (
+            <button
+              className="btn btn-danger"
+              onClick={() => listService.removeUserFromList(list, sharedUser)}
+            >
+              <i className="fas fa-times" />
+            </button>
+          )}
         </div>
       </div>
     );
