@@ -5,6 +5,9 @@ class SharedUser extends Component {
   render() {
     const { list, sharedUser, signedInUser } = this.props;
 
+    const canRemove =
+      list.owner.id === signedInUser.uid || sharedUser.id === signedInUser.uid;
+
     return (
       <div key={sharedUser.id} className="input-group">
         <div className="input-group-prepend">
@@ -21,10 +24,7 @@ class SharedUser extends Component {
           <button
             className="btn btn-danger"
             onClick={() => listService.removeUserFromList(list, sharedUser)}
-            disabled={
-              list.owner !== signedInUser.uid &&
-              sharedUser.id !== signedInUser.uid
-            }
+            disabled={!canRemove}
           >
             <i className="fas fa-times" />
           </button>

@@ -47,6 +47,8 @@ class ShoppingList extends Component {
     const { list, signedInUser } = this.props;
     const { items } = this.state;
 
+    const canDelete = signedInUser.uid === list.owner.id;
+
     return (
       <div className="card">
         <header className="card-header">
@@ -98,6 +100,7 @@ class ShoppingList extends Component {
           <button
             className="btn btn-outline-danger"
             onClick={() => listService.removeShoppingList(list)}
+            disabled={!canDelete}
           >
             Delete list
           </button>
