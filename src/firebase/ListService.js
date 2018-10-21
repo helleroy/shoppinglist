@@ -7,13 +7,15 @@ import { docWithId } from "../utils/firebase";
 export class ListService {
   _db;
   _userService;
-  _shoppingListUnsubscriber;
+  _ownedShoppingListUnsubscriber;
+  _sharedShoppingListUnsubscriber;
   _itemUnsubcribers;
 
   constructor(firebaseApp, userService) {
     this._db = firebase.firestore(firebaseApp);
     this._userService = userService;
-    this._shoppingListUnsubscriber = null;
+    this._ownedShoppingListUnsubscriber = null;
+    this._sharedShoppingListUnsubscriber = null;
     this._itemUnsubcribers = {};
 
     this._db.settings({
@@ -87,13 +89,12 @@ export class ListService {
   }
 
   async updateItem(shoppingList, item) {
-    const updateditem = { ...item };
-    delete updateditem.id;
+    const updatedItem = { name: item.name, checked: item.checked };
 
     try {
       return this._db
         .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
-        .update(updateditem);
+        .update(updatedItem);
     } catch (error) {
       console.log(error);
     }
@@ -137,48 +138,48 @@ export class ListService {
     });
   }
 
-  async getSharedShoppingLists(user) {
-    try {
-      const sharedListsSnapshot = await this._db
-        .collection("shoppinglists")
-        .where("sharedWith", "array-contains", user.uid)
-        .get();
+  ownedShoppingListListener(user, callback) {
+    if (this._ownedShoppingListUnsubscriber) {
+      this._ownedShoppingListUnsubscriber();
+      this._ownedShoppingListUnsubscriber = null;
+    }
 
-      return sharedListsSnapshot.docs.map(docWithId);
+    try {
+      this._ownedShoppingListUnsubscriber = this._db
+        .collection("shoppinglists")
+        .where("owner", "==", user.uid)
+        .onSnapshot(async querySnapshot => {
+          const shoppingLists = querySnapshot.docs.map(docWithId);
+
+          const shoppingListsWithUsers = await this.populateSharedWith(
+            shoppingLists
+          );
+
+          callback(shoppingListsWithUsers);
+        });
     } catch (error) {
       console.log(error);
     }
   }
 
-  shoppingListListener(user, callback) {
-    if (this._shoppingListUnsubscriber) {
-      this._shoppingListUnsubscriber();
-      this._shoppingListUnsubscriber = null;
+  sharedShoppingListsListener(user, callback) {
+    if (this._sharedShoppingListUnsubscriber) {
+      this._sharedShoppingListUnsubscriber();
+      this._sharedShoppingListUnsubscriber = null;
     }
 
-    try {
-      this._shoppingListUnsubscriber = this._db
-        .collection("shoppinglists")
-        .where("owner", "==", user.uid)
-        .onSnapshot(async querySnapshot => {
-          const ownedShoppingLists = querySnapshot.docs.map(docWithId);
+    this._sharedShoppingListUnsubscriber = this._db
+      .collection("shoppinglists")
+      .where("sharedWith", "array-contains", user.uid)
+      .onSnapshot(async querySnapshot => {
+        const shoppingLists = querySnapshot.docs.map(docWithId);
 
-          const sharedShoppingLists = await this.getSharedShoppingLists(user);
+        const shoppingListsWithUsers = await this.populateSharedWith(
+          shoppingLists
+        );
 
-          const uniqueShoppingLists = _.uniqBy(
-            [...ownedShoppingLists, ...sharedShoppingLists],
-            "id"
-          );
-
-          const shoppingLists = await this.populateSharedWith(
-            uniqueShoppingLists
-          );
-
-          callback(shoppingLists);
-        });
-    } catch (error) {
-      console.log(error);
-    }
+        callback(shoppingListsWithUsers);
+      });
   }
 
   itemListener(shoppingList, callback) {

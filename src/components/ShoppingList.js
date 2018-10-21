@@ -23,9 +23,14 @@ class ShoppingList extends Component {
   handleNewSharedUser = async event => {
     event.preventDefault();
 
+    const { signedInUser } = this.props;
     const formData = new FormData(event.target);
+    const email = formData.get("email");
     event.target.reset();
-    await listService.addUserToList(this.props.list, formData.get("email"));
+
+    if (signedInUser.email !== email) {
+      await listService.addUserToList(this.props.list, email);
+    }
   };
 
   handleNewItem = async event => {
@@ -39,13 +44,13 @@ class ShoppingList extends Component {
   };
 
   render() {
-    const { list } = this.props;
+    const { list, signedInUser } = this.props;
     const { items } = this.state;
 
     return (
       <div className="card">
         <header className="card-header">
-          <ShoppingListHeader list={list} />
+          <ShoppingListHeader list={list} signedInUser={signedInUser} />
         </header>
         <main className="card-body">
           <div className="list-group">

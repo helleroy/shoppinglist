@@ -3,16 +3,16 @@ import { listService } from "../context";
 
 class SharedUser extends Component {
   render() {
-    const { list, user } = this.props;
+    const { list, sharedUser, signedInUser } = this.props;
 
     return (
-      <div key={user.id} className="input-group">
+      <div key={sharedUser.id} className="input-group">
         <div className="input-group-prepend">
           <div className="input-group-text d-flex align-items-center">
-            <span className="mr-2">{user.displayName}</span>
+            <span className="mr-2">{sharedUser.displayName}</span>
             <img
-              src={user.photoURL}
-              alt={`${user.displayName}`}
+              src={sharedUser.photoURL}
+              alt={`${sharedUser.displayName}`}
               className="shared-user-profile-image"
             />
           </div>
@@ -20,7 +20,11 @@ class SharedUser extends Component {
         <div className="input-group-append">
           <button
             className="btn btn-danger"
-            onClick={() => listService.removeUserFromList(list, user)}
+            onClick={() => listService.removeUserFromList(list, sharedUser)}
+            disabled={
+              list.owner !== signedInUser.uid &&
+              sharedUser.id !== signedInUser.uid
+            }
           >
             <i className="fas fa-times" />
           </button>

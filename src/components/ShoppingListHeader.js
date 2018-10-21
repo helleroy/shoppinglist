@@ -3,7 +3,7 @@ import SharedUser from "./SharedUser";
 
 class ShoppingListHeader extends Component {
   render() {
-    const { list } = this.props;
+    const { list, signedInUser } = this.props;
 
     return (
       <div>
@@ -16,9 +16,13 @@ class ShoppingListHeader extends Component {
             <div>
               <h4 className="lead m-0">Shared with</h4>
               <div className="d-flex flex-wrap justify-content-start">
-                {list.sharedWith.map(user => (
-                  <div key={user.id} className="mt-2 mr-2">
-                    <SharedUser user={user} list={list} />
+                {list.sharedWith.map(sharedUser => (
+                  <div key={sharedUser.id} className="mt-2 mr-2">
+                    <SharedUser
+                      sharedUser={sharedUser}
+                      signedInUser={signedInUser}
+                      list={list}
+                    />
                   </div>
                 ))}
               </div>

@@ -5,29 +5,33 @@ class ShoppingListItem extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { editable: false, item: props.item };
+    this.state = { editable: false };
   }
 
-  updateItemRemote = () => {
-    listService.updateItem(this.props.list, this.state.item);
+  updateItemRemote = item => {
+    listService.updateItem(this.props.list, item);
   };
 
   submitItemChange = event => {
     event.preventDefault();
-    this.setState({ editable: false });
+    const { item } = this.props;
 
-    this.updateItemRemote();
+    const formData = new FormData(event.target);
+    const name = formData.get("name");
+
+    this.setState({ editable: false });
+    this.updateItemRemote({ ...item, name });
   };
 
   toggleItemChecked = () => {
-    const { item } = this.state;
-    this.setState({ item: { ...item, checked: !item.checked } }, () => {
-      this.updateItemRemote();
-    });
+    const { item } = this.props;
+    const checked = !item.checked;
+    this.updateItemRemote({ ...item, checked });
   };
 
   renderName = () => {
-    const { editable, item } = this.state;
+    const { item } = this.props;
+    const { editable } = this.state;
 
     const checkedStyle = item.checked ? "border-success" : null;
 
@@ -36,11 +40,9 @@ class ShoppingListItem extends Component {
         type="text"
         placeholder="Name"
         className={`form-control ${checkedStyle}`}
-        value={item.name}
+        name="name"
         autoFocus
-        onChange={event =>
-          this.setState({ item: { ...item, name: event.target.value } })
-        }
+        defaultValue={item.name}
       />
     ) : (
       <div
@@ -56,18 +58,15 @@ class ShoppingListItem extends Component {
     const { editable } = this.state;
 
     return editable ? (
-      <button
-        type="button"
-        className="btn btn-info col-6 "
-        onClick={this.submitItemChange}
-      >
+      <button type="submit" className="btn btn-info col-6">
         <i className="fas fa-check" />
       </button>
     ) : (
       <button
         type="button"
         className="btn btn-outline-info col-6"
-        onClick={() => {
+        onClick={event => {
+          event.preventDefault();
           this.setState({ editable: true });
         }}
       >
@@ -77,8 +76,7 @@ class ShoppingListItem extends Component {
   };
 
   render() {
-    const { list } = this.props;
-    const { item } = this.state;
+    const { list, item } = this.props;
 
     return (
       <form className="input-group" onSubmit={this.submitItemChange}>
