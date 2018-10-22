@@ -51,25 +51,50 @@ jobs:
 
       - run: npm run test
 
+  release:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/
+
+      - run: npm run release
+
   deploy:
     <<: *defaults
     steps:
       - attach_workspace:
           at: ~/
+
       - run:
           name: Deploy Master to Firebase
           command: npm run deploy -- --token=$FIREBASE_DEPLOY_TOKEN
 
 workflows:
   version: 2
-  build-deploy:
+
+  build-test-release:
     jobs:
       - build
       - test
-      - deploy:
+      - release:
           requires:
             - build
             - test
           filters:
             branches:
               only: master
+
+  build-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
