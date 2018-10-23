@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/helleroy/shoppinglist/compare/v1.0.2...v1.0.3) (2018-10-23)
+
+
+### Bug Fixes
+
+* reset state on signout ([43ac3ba](https://github.com/helleroy/shoppinglist/commit/43ac3ba))
+
 ## [1.0.2](https://github.com/helleroy/shoppinglist/compare/v1.0.1...v1.0.2) (2018-10-23)
 
 ### Bug Fixes
