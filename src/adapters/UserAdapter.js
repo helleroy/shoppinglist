@@ -1,15 +1,10 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
 import { docWithId } from "../utils/firebase";
 
-export class UserService {
+export class UserAdapter {
   _db;
 
-  constructor(firebaseApp) {
-    this._db = firebase.firestore(firebaseApp);
-    this._db.settings({
-      timestampsInSnapshots: true
-    });
+  constructor(db) {
+    this._db = db;
   }
 
   async updateUser(user) {

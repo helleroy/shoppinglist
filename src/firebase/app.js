@@ -1,7 +1,11 @@
 import firebase from "firebase/app";
+import "firebase/firestore";
+import "firebase/auth";
 
 export class FirebaseApp {
   _app;
+  _db;
+  _auth;
 
   constructor() {
     this._app = firebase.initializeApp({
@@ -12,9 +16,25 @@ export class FirebaseApp {
       storageBucket: "",
       messagingSenderId: "653122939571"
     });
+
+    this._db = firebase.firestore(this._app);
+    this._db.settings({
+      timestampsInSnapshots: true
+    });
+
+    this._auth = firebase.auth(this._app);
+    this._auth.useDeviceLanguage();
   }
 
-  get() {
+  get app() {
     return this._app;
+  }
+
+  get db() {
+    return this._db;
+  }
+
+  get auth() {
+    return this._auth;
   }
 }

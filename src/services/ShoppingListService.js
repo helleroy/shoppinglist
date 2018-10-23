@@ -1,33 +1,24 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
 import _ from "lodash";
 import { addToList, removeFromList } from "../utils/list";
-import { docWithId } from "../utils/firebase";
 
-export class ListService {
-  _db;
-  _userService;
+export class ShoppingListService {
+  _shoppingListAdapter;
+  _userAdapter;
   _ownedShoppingListUnsubscriber;
   _sharedShoppingListUnsubscriber;
   _itemUnsubcribers;
 
-  constructor(firebaseApp, userService) {
-    this._db = firebase.firestore(firebaseApp);
-    this._userService = userService;
+  constructor(shoppingListAdapter, userAdapter) {
+    this._shoppingListAdapter = shoppingListAdapter;
+    this._userAdapter = userAdapter;
     this._ownedShoppingListUnsubscriber = null;
     this._sharedShoppingListUnsubscriber = null;
     this._itemUnsubcribers = {};
-
-    this._db.settings({
-      timestampsInSnapshots: true
-    });
   }
 
   async createShoppingList(user, name) {
     try {
-      return this._db
-        .collection("shoppinglists")
-        .add({ owner: user.uid, name, sharedWith: [] });
+      return this._shoppingListAdapter.createShoppingList(user, name);
     } catch (error) {
       console.log(error);
     }
@@ -35,24 +26,10 @@ export class ListService {
 
   async removeShoppingList(shoppingList) {
     try {
-      await this.removeAllItemsFromShoppingList(shoppingList);
-      return this._db.doc(`shoppinglists/${shoppingList.id}`).delete();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async removeAllItemsFromShoppingList(shoppingList) {
-    try {
-      const itemsSnapshot = await this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .get();
-
-      const batch = this._db.batch();
-
-      itemsSnapshot.forEach(doc => batch.delete(doc.ref));
-
-      await batch.commit();
+      await this._shoppingListAdapter.removeAllItemsFromShoppingList(
+        shoppingList
+      );
+      return this._shoppingListAdapter.removeShoppingList(shoppingList);
     } catch (error) {
       console.log(error);
     }
@@ -60,9 +37,10 @@ export class ListService {
 
   async addItemToShoppingList(shoppingList, item) {
     try {
-      return this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .add({ name: item.name, checked: false });
+      return this._shoppingListAdapter.addItemToShoppingList(
+        shoppingList,
+        item
+      );
     } catch (error) {
       console.log(error);
     }
@@ -70,9 +48,10 @@ export class ListService {
 
   async removeItemFromShoppingList(shoppingList, item) {
     try {
-      return this._db
-        .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
-        .delete();
+      return this._shoppingListAdapter.removeItemFromShoppingList(
+        shoppingList,
+        item
+      );
     } catch (error) {
       console.log(error);
     }
@@ -84,7 +63,7 @@ export class ListService {
     }
 
     try {
-      return this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
+      return this._shoppingListAdapter.updateListName(shoppingList, name);
     } catch (error) {
       console.log(error);
     }
@@ -92,30 +71,22 @@ export class ListService {
 
   async updateSharedWith(shoppingList, users) {
     try {
-      const userIds = users.map(u => u.id);
-
-      return this._db
-        .doc(`shoppinglists/${shoppingList.id}`)
-        .update({ sharedWith: userIds });
+      return this._shoppingListAdapter.updateSharedWith(shoppingList, users);
     } catch (error) {
       console.log(error);
     }
   }
 
   async updateItem(shoppingList, item) {
-    const updatedItem = { name: item.name, checked: item.checked };
-
     try {
-      return this._db
-        .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
-        .update(updatedItem);
+      return this._shoppingListAdapter.updateItem(shoppingList, item);
     } catch (error) {
       console.log(error);
     }
   }
 
   async addUserToList(shoppingList, email) {
-    const user = await this._userService.getUserByEmail(email);
+    const user = await this._userAdapter.getUserByEmail(email);
 
     if (user) {
       const users = addToList(shoppingList.sharedWith, user);
@@ -134,7 +105,7 @@ export class ListService {
     const userByIdPromises = _.chain(shoppingLists)
       .flatMap(list => [...list.sharedWith, list.owner])
       .uniq()
-      .map(userId => this._userService.getUserById(userId))
+      .map(userId => this._userAdapter.getUserById(userId))
       .value();
 
     const uniqueUsers = await Promise.all(userByIdPromises);
@@ -156,18 +127,15 @@ export class ListService {
     this.unsubscribeOwnedShoppingListListener();
 
     try {
-      this._ownedShoppingListUnsubscriber = this._db
-        .collection("shoppinglists")
-        .where("owner", "==", user.uid)
-        .onSnapshot(async querySnapshot => {
-          const shoppingLists = querySnapshot.docs.map(docWithId);
-
+      this._ownedShoppingListUnsubscriber = this._shoppingListAdapter.ownedShoppingListListener(
+        user,
+        async shoppingLists => {
           const shoppingListsWithUsers = await this.populateUserData(
             shoppingLists
           );
-
           callback(shoppingListsWithUsers);
-        });
+        }
+      );
     } catch (error) {
       console.log(error);
     }
@@ -176,31 +144,28 @@ export class ListService {
   sharedShoppingListsListener(user, callback) {
     this.unsubscribeSharedShoppingListListener();
 
-    this._sharedShoppingListUnsubscriber = this._db
-      .collection("shoppinglists")
-      .where("sharedWith", "array-contains", user.uid)
-      .onSnapshot(async querySnapshot => {
-        const shoppingLists = querySnapshot.docs.map(docWithId);
-
-        const shoppingListsWithUsers = await this.populateUserData(
-          shoppingLists
-        );
-
-        callback(shoppingListsWithUsers);
-      });
+    try {
+      this._sharedShoppingListUnsubscriber = this._shoppingListAdapter.sharedShoppingListsListener(
+        user,
+        async shoppingLists => {
+          const shoppingListsWithUsers = await this.populateUserData(
+            shoppingLists
+          );
+          callback(shoppingListsWithUsers);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   itemListener(shoppingList, callback) {
     this.unsubscribeItemListener(shoppingList);
 
     try {
-      this._itemUnsubcribers[shoppingList.id] = this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .onSnapshot(querySnapshot => {
-          const items = querySnapshot.docs.map(docWithId);
-
-          callback(items);
-        });
+      this._itemUnsubcribers[
+        shoppingList.id
+      ] = this._shoppingListAdapter.itemListener(shoppingList, callback);
     } catch (error) {
       console.log(error);
     }

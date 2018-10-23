@@ -1,33 +1,27 @@
-import firebase from "firebase/app";
-import "firebase/auth";
-
 export class AuthenticationService {
-  _authApp;
+  _authenticationAdapter;
   _authStateChangedUnsubscriber;
 
-  constructor(firebaseApp) {
-    this._authApp = firebase.auth(firebaseApp);
-    this._authApp.useDeviceLanguage();
+  constructor(authenticationAdapter) {
+    this._authenticationAdapter = authenticationAdapter;
     this._authStateChangedUnsubscriber = null;
   }
 
   async signInWithGoogle() {
-    await this._authApp.signInWithRedirect(
-      new firebase.auth.GoogleAuthProvider()
-    );
+    await this._authenticationAdapter.signInWithGoogle();
   }
 
   handleAuthStateChanged(callback) {
     this.unsubscribeAuthStateChangedListener();
 
-    this._authStateChangedUnsubscriber = this._authApp.onAuthStateChanged(
+    this._authStateChangedUnsubscriber = this._authenticationAdapter.authStateChangedListener(
       callback
     );
   }
 
   async signOut() {
     try {
-      await this._authApp.signOut();
+      await this._authenticationAdapter.signOut();
     } catch (error) {
       throw error;
     }
