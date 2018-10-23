@@ -10,7 +10,7 @@
 
 - separate services from firebase ([71271f0](https://github.com/helleroy/shoppinglist/commit/71271f0))
 
-## [1.0.0](https://github.com/helleroy/shoppinglist/tree/v1.0.0) (2018-10-22)
+# [1.0.0](https://github.com/helleroy/shoppinglist/tree/v1.0.0) (2018-10-22)
 
 ### Bug Fixes
 
