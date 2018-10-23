@@ -123,7 +123,7 @@ export class ShoppingListAdapter {
 
   itemListener(shoppingList, callback) {
     try {
-      this._itemUnsubcribers[shoppingList.id] = this._db
+      return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
         .onSnapshot(querySnapshot => {
           const items = querySnapshot.docs.map(docWithId);

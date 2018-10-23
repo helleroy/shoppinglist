@@ -6,9 +6,10 @@ class UserStatus extends Component {
     await authenticationService.signInWithGoogle();
   }
 
-  async signOut() {
+  signOut = async () => {
+    this.props.onSignOut();
     await authenticationService.signOut();
-  }
+  };
 
   render() {
     const { user } = this.props;

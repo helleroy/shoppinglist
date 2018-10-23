@@ -6,15 +6,17 @@ import WelcomeJumbotron from "./components/WelcomeJumbotron";
 import AppHeader from "./components/AppHeader";
 import { mergeShoppingLists } from "./utils/shoppingLists";
 
+const initialState = {
+  user: null,
+  ownedShoppingLists: [],
+  sharedShoppingLists: []
+};
+
 class App extends Component {
   constructor() {
     super();
 
-    this.state = {
-      user: null,
-      ownedShoppingLists: [],
-      sharedShoppingLists: []
-    };
+    this.state = initialState;
   }
 
   componentDidMount() {
@@ -52,7 +54,11 @@ class App extends Component {
     return (
       <div className="container">
         <header>
-          <AppHeader user={user} shoppingLists={shoppingLists} />
+          <AppHeader
+            user={user}
+            shoppingLists={shoppingLists}
+            onSignOut={() => this.setState(initialState)}
+          />
         </header>
         <main className="main row">
           <div className="col">
