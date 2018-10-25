@@ -5,12 +5,17 @@ import { UserService } from "./services/UserService";
 import { ShoppingListAdapter } from "./adapters/ShoppingListAdapter";
 import { UserAdapter } from "./adapters/UserAdapter";
 import { AuthenticationAdapter } from "./adapters/AuthenticationAdapter";
+import { BrowserLocalStorageAdapter } from "./adapters/BrowserLocalStorageAdapter";
 
 const firebaseApp = new FirebaseApp();
 
 const shoppingListAdapter = new ShoppingListAdapter(firebaseApp.db);
 
 const userAdapter = new UserAdapter(firebaseApp.db);
+
+const browserLocalStorageAdapter = new BrowserLocalStorageAdapter(
+  window.localStorage
+);
 
 const authenticationAdapter = new AuthenticationAdapter(firebaseApp.auth);
 
@@ -22,5 +27,6 @@ export const userService = new UserService(userAdapter);
 
 export const listService = new ShoppingListService(
   shoppingListAdapter,
-  userAdapter
+  userAdapter,
+  browserLocalStorageAdapter
 );

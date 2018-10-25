@@ -1,15 +1,15 @@
 import React, { Component } from "react";
+import { arrayMove } from "react-sortable-hoc";
 import "./App.css";
-import ShoppingList from "./components/ShoppingList";
 import { authenticationService, listService, userService } from "./context";
 import WelcomeJumbotron from "./components/WelcomeJumbotron";
 import AppHeader from "./components/AppHeader";
+import ShoppingLists from "./components/ShoppingLists";
 import { mergeShoppingLists } from "./utils/shoppingLists";
 
 const initialState = {
   user: null,
-  ownedShoppingLists: [],
-  sharedShoppingLists: []
+  shoppingLists: []
 };
 
 class App extends Component {
@@ -26,10 +26,10 @@ class App extends Component {
 
         userService.updateUser(user);
         listService.ownedShoppingListListener(user, ownedShoppingLists =>
-          this.setState({ ownedShoppingLists })
+          this.onListsUpdate(ownedShoppingLists)
         );
         listService.sharedShoppingListsListener(user, sharedShoppingLists =>
-          this.setState({ sharedShoppingLists })
+          this.onListsUpdate(sharedShoppingLists)
         );
       } else {
         this.setState({ user: null });
@@ -43,13 +43,33 @@ class App extends Component {
     authenticationService.unsubscribeAuthStateChangedListener();
   }
 
-  render() {
-    const { user, ownedShoppingLists, sharedShoppingLists } = this.state;
-
-    const shoppingLists = mergeShoppingLists(
-      ownedShoppingLists,
-      sharedShoppingLists
+  onListsUpdate = updatedShoppingLists => {
+    const mergedShoppingLists = mergeShoppingLists(
+      this.state.shoppingLists,
+      updatedShoppingLists
     );
+
+    const shoppingLists = listService.restoreShoppingListOrder(
+      mergedShoppingLists
+    );
+
+    this.setState({ shoppingLists });
+  };
+
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    const shoppingLists = arrayMove(
+      this.state.shoppingLists,
+      oldIndex,
+      newIndex
+    );
+
+    this.setState({ shoppingLists });
+
+    listService.saveShoppingListOrder(shoppingLists);
+  };
+
+  render() {
+    const { user, shoppingLists } = this.state;
 
     return (
       <div className="container">
@@ -63,11 +83,11 @@ class App extends Component {
         <main className="main row">
           <div className="col">
             {shoppingLists.length === 0 && <WelcomeJumbotron user={user} />}
-            {shoppingLists.map(list => {
-              return (
-                <ShoppingList key={list.id} list={list} signedInUser={user} />
-              );
-            })}
+            <ShoppingLists
+              items={shoppingLists}
+              user={user}
+              onSortEnd={this.onSortEnd}
+            />
           </div>
         </main>
       </div>

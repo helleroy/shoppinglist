@@ -20,3 +20,7 @@
   outline: none;
   line-height: normal;
 }
+
+.drag-handle {
+  font-size: 1.5rem;
+}

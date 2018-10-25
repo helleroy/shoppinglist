@@ -1,16 +1,20 @@
 import _ from "lodash";
 import { addToList, removeFromList } from "../utils/list";
 
+const LIST_ORDER_KEY = "shoppinglist-order";
+
 export class ShoppingListService {
   _shoppingListAdapter;
   _userAdapter;
+  _localStorageAdapter;
   _ownedShoppingListUnsubscriber;
   _sharedShoppingListUnsubscriber;
   _itemUnsubcribers;
 
-  constructor(shoppingListAdapter, userAdapter) {
+  constructor(shoppingListAdapter, userAdapter, localStorageAdapter) {
     this._shoppingListAdapter = shoppingListAdapter;
     this._userAdapter = userAdapter;
+    this._localStorageAdapter = localStorageAdapter;
     this._ownedShoppingListUnsubscriber = null;
     this._sharedShoppingListUnsubscriber = null;
     this._itemUnsubcribers = {};
@@ -99,6 +103,31 @@ export class ShoppingListService {
     const users = removeFromList(shoppingList.sharedWith, user);
 
     await this.updateSharedWith(shoppingList, users);
+  }
+
+  saveShoppingListOrder(shoppingLists) {
+    const shoppingListOrder = shoppingLists.reduce(
+      (listOrder, currentList, index) => {
+        listOrder[currentList.id] = index;
+        return listOrder;
+      },
+      {}
+    );
+
+    this._localStorageAdapter.setItem(LIST_ORDER_KEY, shoppingListOrder);
+  }
+
+  restoreShoppingListOrder(shoppingLists) {
+    const shoppingListOrder = this._localStorageAdapter.getItem(LIST_ORDER_KEY);
+
+    if (shoppingListOrder) {
+      return _.sortBy(
+        shoppingLists,
+        shoppingList => shoppingListOrder[shoppingList.id]
+      );
+    }
+
+    return shoppingLists;
   }
 
   async populateUserData(shoppingLists) {
