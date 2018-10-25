@@ -1,3 +1,15 @@
+# [1.1.0](https://github.com/helleroy/shoppinglist/compare/v1.0.3...v1.1.0) (2018-10-25)
+
+
+### Bug Fixes
+
+* resolve delete list regression ([b82fd23](https://github.com/helleroy/shoppinglist/commit/b82fd23))
+
+
+### Features
+
+* sort lists by dragging and dropping ([a441d84](https://github.com/helleroy/shoppinglist/commit/a441d84))
+
 ## [1.0.3](https://github.com/helleroy/shoppinglist/compare/v1.0.2...v1.0.3) (2018-10-23)
 
 
