@@ -9,6 +9,8 @@ import { mergeShoppingLists } from "./utils/shoppingLists";
 
 const initialState = {
   user: null,
+  ownedShoppingLists: [],
+  sharedShoppingLists: [],
   shoppingLists: []
 };
 
@@ -26,10 +28,10 @@ class App extends Component {
 
         userService.updateUser(user);
         listService.ownedShoppingListListener(user, ownedShoppingLists =>
-          this.onListsUpdate(ownedShoppingLists)
+          this.updateOwnedLists(ownedShoppingLists)
         );
         listService.sharedShoppingListsListener(user, sharedShoppingLists =>
-          this.onListsUpdate(sharedShoppingLists)
+          this.updateSharedLists(sharedShoppingLists)
         );
       } else {
         this.setState({ user: null });
@@ -43,14 +45,29 @@ class App extends Component {
     authenticationService.unsubscribeAuthStateChangedListener();
   }
 
-  onListsUpdate = updatedShoppingLists => {
+  updateOwnedLists = ownedShoppingLists => {
     const mergedShoppingLists = mergeShoppingLists(
-      this.state.shoppingLists,
-      updatedShoppingLists
+      this.state.sharedShoppingLists,
+      ownedShoppingLists
     );
 
+    this.setState({ ownedShoppingLists });
+    this.updateShoppingLists(mergedShoppingLists);
+  };
+
+  updateSharedLists = sharedShoppingLists => {
+    const mergedShoppingLists = mergeShoppingLists(
+      this.state.ownedShoppingLists,
+      sharedShoppingLists
+    );
+
+    this.setState({ sharedShoppingLists });
+    this.updateShoppingLists(mergedShoppingLists);
+  };
+
+  updateShoppingLists = updatedShoppingLists => {
     const shoppingLists = listService.restoreShoppingListOrder(
-      mergedShoppingLists
+      updatedShoppingLists
     );
 
     this.setState({ shoppingLists });
