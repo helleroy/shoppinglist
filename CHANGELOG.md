@@ -1,3 +1,11 @@
+## [1.1.1](https://github.com/helleroy/shoppinglist/compare/v1.1.0...v1.1.1) (2018-10-25)
+
+
+### Bug Fixes
+
+* **deps:** react 16.6 and other dependencies ([7211dea](https://github.com/helleroy/shoppinglist/commit/7211dea))
+* blur share list and create list fields on submit ([7e99571](https://github.com/helleroy/shoppinglist/commit/7e99571)), closes [#5](https://github.com/helleroy/shoppinglist/issues/5)
+
 # [1.1.0](https://github.com/helleroy/shoppinglist/compare/v1.0.3...v1.1.0) (2018-10-25)
 
 
