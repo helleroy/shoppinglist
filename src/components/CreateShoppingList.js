@@ -2,12 +2,21 @@ import React, { Component } from "react";
 import { listService } from "../context";
 
 class CreateShoppingList extends Component {
+  _listNameInputRef;
+
+  constructor() {
+    super();
+
+    this._listNameInputRef = React.createRef();
+  }
+
   handleSubmit = async event => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
     const name = formData.get("name");
     event.target.reset();
+    this._listNameInputRef.current.blur();
 
     await listService.createShoppingList(this.props.user, name);
   };
@@ -17,6 +26,7 @@ class CreateShoppingList extends Component {
       <div>
         <form onSubmit={this.handleSubmit} className="input-group">
           <input
+            ref={this._listNameInputRef}
             type="text"
             placeholder="List name"
             className="form-control"

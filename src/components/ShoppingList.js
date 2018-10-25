@@ -3,6 +3,7 @@ import { listService } from "../context";
 import ShoppingListItem from "./ShoppingListItem";
 import ShoppingListHeader from "./ShoppingListHeader";
 import DragHandle from "./DragHandle";
+import ShareShoppingList from "./ShareShoppingList";
 
 class ShoppingList extends Component {
   constructor(props) {
@@ -20,19 +21,6 @@ class ShoppingList extends Component {
   componentWillUnmount() {
     listService.unsubscribeItemListener(this.props.list);
   }
-
-  handleNewSharedUser = async event => {
-    event.preventDefault();
-
-    const { signedInUser } = this.props;
-    const formData = new FormData(event.target);
-    const email = formData.get("email");
-    event.target.reset();
-
-    if (signedInUser.email !== email) {
-      await listService.addUserToList(this.props.list, email);
-    }
-  };
 
   handleNewItem = async event => {
     event.preventDefault();
@@ -82,22 +70,7 @@ class ShoppingList extends Component {
         </main>
         <footer className="card-footer py-0 pb-3">
           <div className="row justify-content-between">
-            <form
-              onSubmit={this.handleNewSharedUser}
-              className="input-group col-sm-6 mt-3"
-            >
-              <input
-                type="email"
-                name="email"
-                placeholder="User email"
-                className="form-control"
-              />
-              <div className="input-group-append">
-                <button type="submit" className="btn btn-secondary">
-                  Share
-                </button>
-              </div>
-            </form>
+            <ShareShoppingList signedInUser={signedInUser} list={list} />
             {canDelete && (
               <div className="col-sm-3 mt-3">
                 <button
