@@ -17,7 +17,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "release": "semantic-release",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "prepare": "cd functions && npm install"
   },
   "eslintConfig": {
     "extends": "react-app"

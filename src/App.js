@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import { arrayMove } from "react-sortable-hoc";
 import "./App.css";
-import { authenticationService, listService, userService } from "./context";
+import {
+  authenticationService,
+  listService,
+  userService,
+  messagingService
+} from "./context";
 import WelcomeJumbotron from "./components/WelcomeJumbotron";
 import AppHeader from "./components/AppHeader";
 import ShoppingLists from "./components/ShoppingLists";
@@ -33,6 +38,12 @@ class App extends Component {
         listService.sharedShoppingListsListener(user, sharedShoppingLists =>
           this.updateSharedLists(sharedShoppingLists)
         );
+
+        messagingService.requestPermission(user);
+        messagingService.listenForRefreshedToken(user);
+        messagingService.onMessage(message => {
+          this.setState({ notification: message });
+        });
       } else {
         this.setState({ user: null });
       }

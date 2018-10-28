@@ -18,6 +18,14 @@ export class UserAdapter {
     }
   }
 
+  async updateMessagingToken(user, messagingToken) {
+    try {
+      return this._db.doc(`users/${user.uid}`).update({ messagingToken });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async getUserById(id) {
     try {
       const doc = await this._db.doc(`users/${id}`).get();
