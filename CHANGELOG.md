@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/helleroy/shoppinglist/compare/v1.1.1...v1.2.0) (2018-10-28)
+
+
+### Features
+
+* **messaging:** push notifications when a list is shared with you ([8c07b71](https://github.com/helleroy/shoppinglist/commit/8c07b71)), closes [#6](https://github.com/helleroy/shoppinglist/issues/6)
+
 ## [1.1.1](https://github.com/helleroy/shoppinglist/compare/v1.1.0...v1.1.1) (2018-10-25)
 
 
