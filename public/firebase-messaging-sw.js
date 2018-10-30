@@ -17,8 +17,9 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(function(payload) {
-  const title = payload.notification.title;
+  const { title, body } = payload.data;
   const options = {
+    body,
     icon: "/favicon.ico"
   };
 
@@ -26,8 +27,31 @@ messaging.setBackgroundMessageHandler(function(payload) {
 });
 
 self.addEventListener("notificationclick", function(event) {
-  const clickedNotification = event.notification;
-  clickedNotification.close();
+  event.notification.close();
 
-  event.waitUntil(self.clients.openWindow(self.location.origin));
+  // This looks to see if the current is already open and
+  // focuses if it is
+  event.waitUntil(
+    clients
+      .matchAll({
+        includeUncontrolled: true,
+        type: "window"
+      })
+      .then(function(clientList) {
+        for (let i = 0; i < clientList.length; i++) {
+          const client = clientList[i];
+
+          const isOrigin = client.url.includes(self.location.origin);
+          const canBeFocused = "focus" in client;
+
+          if (isOrigin && canBeFocused) {
+            return client.focus();
+          }
+        }
+
+        if (clients.openWindow) {
+          return clients.openWindow("/");
+        }
+      })
+  );
 });

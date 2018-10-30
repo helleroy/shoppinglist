@@ -40,7 +40,7 @@ exports.notificationsApi = functions.firestore
     }
 
     const messagePayload = {
-      notification: {
+      data: {
         title: `${afterDocument.name} was shared with you`,
         body: `Someone shared the ${afterDocument.name} list with you`
       }
