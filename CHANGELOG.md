@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/helleroy/shoppinglist/compare/v1.2.0...v1.2.1) (2018-10-30)
+
+
+### Bug Fixes
+
+* let notification click open the app ([7e0ae89](https://github.com/helleroy/shoppinglist/commit/7e0ae89))
+
 # [1.2.0](https://github.com/helleroy/shoppinglist/compare/v1.1.1...v1.2.0) (2018-10-28)
 
 
