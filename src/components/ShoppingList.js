@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { listService } from "../context";
 import ShoppingListItem from "./ShoppingListItem";
 import ShoppingListHeader from "./ShoppingListHeader";
-import DragHandle from "./DragHandle";
 import ShareShoppingList from "./ShareShoppingList";
 
 class ShoppingList extends Component {
@@ -40,9 +39,8 @@ class ShoppingList extends Component {
 
     return (
       <div className="card mb-3">
-        <header className="card-header d-flex flex-row justify-content-between">
+        <header className="card-header">
           <ShoppingListHeader list={list} signedInUser={signedInUser} />
-          <DragHandle />
         </header>
         <main className="card-body">
           <div className="list-group">

@@ -24,3 +24,22 @@
 .drag-handle {
   font-size: 1.5rem;
 }
+
+.list-details-toggle {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  outline: 0;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  transition: transform 0.4s ease-out;
+}
+
+.rotate-180 {
+  transform: rotate(180deg);
+}
+
+.Collapsible__trigger {
+  display: none;
+}
