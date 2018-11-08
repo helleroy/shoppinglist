@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/helleroy/shoppinglist/compare/v1.2.1...v1.2.2) (2018-11-08)
+
+
+### Bug Fixes
+
+* add button to toggle list details ([00cbfa9](https://github.com/helleroy/shoppinglist/commit/00cbfa9)), closes [#7](https://github.com/helleroy/shoppinglist/issues/7)
+* handle header text and input field overflow ([688987e](https://github.com/helleroy/shoppinglist/commit/688987e)), closes [#3](https://github.com/helleroy/shoppinglist/issues/3)
+
 ## [1.2.1](https://github.com/helleroy/shoppinglist/compare/v1.2.0...v1.2.1) (2018-10-30)
 
 
