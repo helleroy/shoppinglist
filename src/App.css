@@ -14,11 +14,18 @@
   cursor: pointer;
 }
 
+.list-header-text {
+  overflow: hidden;
+  line-height: 4.5rem;
+}
+
 .discreet-input {
   background-color: transparent;
   border: none;
   outline: none;
-  line-height: normal;
+  padding: 0 0 0.5rem;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .drag-handle {

@@ -56,12 +56,12 @@ class ShoppingListHeader extends Component {
                   name="name"
                   defaultValue={list.name}
                   autoFocus
-                  className="display-4 discreet-input"
+                  className="display-4 discreet-input list-header-text"
                   autoComplete="off"
                 />
               ) : (
                 <h2
-                  className="display-4 clickable"
+                  className="display-4 clickable list-header-text"
                   onClick={() => this.setState({ editingListName: true })}
                 >
                   {list.name}
