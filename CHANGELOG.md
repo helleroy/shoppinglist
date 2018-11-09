@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/helleroy/shoppinglist/compare/v1.2.3...v1.2.4) (2018-11-09)
+
+
+### Bug Fixes
+
+* add service worker config to prevent it from crashing ([0f57101](https://github.com/helleroy/shoppinglist/commit/0f57101))
+
 ## [1.2.3](https://github.com/helleroy/shoppinglist/compare/v1.2.2...v1.2.3) (2018-11-09)
 
 
