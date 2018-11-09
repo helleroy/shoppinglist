@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/helleroy/shoppinglist/compare/v1.2.2...v1.2.3) (2018-11-09)
+
+
+### Bug Fixes
+
+* improve PWA functionality after Lighthouse Audit ([98a17f6](https://github.com/helleroy/shoppinglist/commit/98a17f6))
+
 ## [1.2.2](https://github.com/helleroy/shoppinglist/compare/v1.2.1...v1.2.2) (2018-11-08)
 
 
