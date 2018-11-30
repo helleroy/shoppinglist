@@ -21,7 +21,7 @@ async function getUserById(id) {
   }
 }
 
-exports.notificationsApi = functions.firestore
+exports.sharedWithNotification = functions.firestore
   .document("shoppinglists/{shoppingListId}")
   .onUpdate(async change => {
     const afterDocument = change.after.data();
