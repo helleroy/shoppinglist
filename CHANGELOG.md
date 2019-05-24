@@ -1,3 +1,11 @@
+## [1.2.5](https://github.com/helleroy/shoppinglist/compare/v1.2.4...v1.2.5) (2019-05-24)
+
+
+### Bug Fixes
+
+* remove deprecated firestore setting ([42d17ae](https://github.com/helleroy/shoppinglist/commit/42d17ae))
+* rename sharedWithNotification Function ([401b45a](https://github.com/helleroy/shoppinglist/commit/401b45a))
+
 ## [1.2.4](https://github.com/helleroy/shoppinglist/compare/v1.2.3...v1.2.4) (2018-11-09)
 
 
