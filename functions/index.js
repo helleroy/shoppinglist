@@ -4,7 +4,6 @@ const _ = require("lodash");
 
 const app = admin.initializeApp();
 const firestore = app.firestore();
-firestore.settings({ timestampsInSnapshots: true });
 const messaging = app.messaging();
 
 async function getUserById(id) {

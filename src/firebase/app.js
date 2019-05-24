@@ -20,9 +20,6 @@ export class FirebaseApp {
     });
 
     this._db = firebase.firestore(this._app);
-    this._db.settings({
-      timestampsInSnapshots: true
-    });
 
     this._auth = firebase.auth(this._app);
     this._auth.useDeviceLanguage();
