@@ -1,3 +1,10 @@
+## [1.2.8](https://github.com/helleroy/shoppinglist/compare/v1.2.7...v1.2.8) (2020-03-21)
+
+
+### Bug Fixes
+
+* avoid initializing Firebase Messaging if it's not supported ([7f8b439](https://github.com/helleroy/shoppinglist/commit/7f8b439525ce48f503546e00bbc87fe01b87d968))
+
 ## [1.2.7](https://github.com/helleroy/shoppinglist/compare/v1.2.6...v1.2.7) (2020-03-21)
 
 
