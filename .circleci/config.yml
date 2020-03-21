@@ -40,7 +40,7 @@ jobs:
           at: ~/
       - run:
           name: Deploy Master to Firebase
-          command: npm run deploy -- --token=$FIREBASE_DEPLOY_TOKEN
+          command: npm run deploy
 
 workflows:
   version: 2
