@@ -1,3 +1,10 @@
+## [1.2.6](https://github.com/helleroy/shoppinglist/compare/v1.2.5...v1.2.6) (2020-03-21)
+
+
+### Bug Fixes
+
+* update Firebase config ([1f1e39d](https://github.com/helleroy/shoppinglist/commit/1f1e39d62ae18e633ca1b3de8b508e1a0486bd66))
+
 ## [1.2.5](https://github.com/helleroy/shoppinglist/compare/v1.2.4...v1.2.5) (2019-05-24)
 
 
