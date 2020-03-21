@@ -1,14 +1,20 @@
 export class FirebaseApp {
-  _app;
-  _db;
-  _auth;
-  _messaging;
+  _options: {};
+  _app: {};
+  _db: {};
+  _auth: {};
+  _messaging: {};
 
   constructor() {
-    this._app = { options: {} };
+    this._options = {};
+    this._app = {};
     this._db = {};
     this._auth = { onAuthStateChanged: () => {} };
     this._messaging = {};
+  }
+
+  get options() {
+    return this._options;
   }
 
   get app() {
