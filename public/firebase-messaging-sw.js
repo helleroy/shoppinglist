@@ -14,17 +14,19 @@ firebase.initializeApp({
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
 // messages.
-const messaging = firebase.messaging();
+if (firebase.messaging.isSupported()) {
+  const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(payload) {
-  const { title, body } = payload.data;
-  const options = {
-    body,
-    icon: "/favicon.ico"
-  };
+  messaging.setBackgroundMessageHandler(function(payload) {
+    const { title, body } = payload.data;
+    const options = {
+      body,
+      icon: "/favicon.ico"
+    };
 
-  return self.registration.showNotification(title, options);
-});
+    return self.registration.showNotification(title, options);
+  });
+}
 
 self.addEventListener("notificationclick", function(event) {
   event.notification.close();

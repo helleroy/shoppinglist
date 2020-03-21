@@ -25,10 +25,12 @@ export class FirebaseApp {
     this._auth = firebase.auth(this._app);
     this._auth.useDeviceLanguage();
 
-    this._messaging = firebase.messaging();
-    this._messaging.usePublicVapidKey(
-      "BIlIsfvbhieh8dLuLLmgnEd852fZc-0x7A8hffbsAz_1zB92yxKVj4uyp-ZyB2FZ3hY98h4eQilwZ9u4SernMNo"
-    );
+    if (firebase.messaging.isSupported()) {
+      this._messaging = firebase.messaging();
+      this._messaging.usePublicVapidKey(
+        "BIlIsfvbhieh8dLuLLmgnEd852fZc-0x7A8hffbsAz_1zB92yxKVj4uyp-ZyB2FZ3hY98h4eQilwZ9u4SernMNo"
+      );
+    }
   }
 
   get app() {

@@ -8,15 +8,19 @@ export class MessagingAdapter {
   }
 
   onMessage(callback) {
-    this._messaging.onMessage(payload => {
-      console.log("Received message", payload);
-      callback(payload);
-    });
+    if (this._messaging) {
+      this._messaging.onMessage(payload => {
+        console.log("Received message", payload);
+        callback(payload);
+      });
+    }
   }
 
   async requestPermission() {
     try {
-      await this._messaging.requestPermission();
+      if (this._messaging) {
+        await this._messaging.requestPermission();
+      }
     } catch (error) {
       throw error;
     }
@@ -24,12 +28,14 @@ export class MessagingAdapter {
 
   async getToken() {
     try {
-      const currentToken = await this._messaging.getToken();
+      if (this._messaging) {
+        const currentToken = await this._messaging.getToken();
 
-      if (currentToken) {
-        return currentToken;
-      } else {
-        await this.requestPermission();
+        if (currentToken) {
+          return currentToken;
+        } else {
+          await this.requestPermission();
+        }
       }
     } catch (error) {
       console.log("Failed to retrieve token", error);
@@ -37,8 +43,10 @@ export class MessagingAdapter {
   }
 
   listenForRefreshedToken(callback) {
-    this._messaging.onTokenRefresh(async () => {
-      callback(await this.getToken());
-    });
+    if (this._messaging) {
+      this._messaging.onTokenRefresh(async () => {
+        callback(await this.getToken());
+      });
+    }
   }
 }
