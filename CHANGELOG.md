@@ -1,3 +1,10 @@
+## [1.2.9](https://github.com/helleroy/shoppinglist/compare/v1.2.8...v1.2.9) (2020-03-21)
+
+
+### Bug Fixes
+
+* update firebase config in the messaging service worker ([b92b15a](https://github.com/helleroy/shoppinglist/commit/b92b15a9fbeb0d30dde7011bf72d5c07bb7472b5))
+
 ## [1.2.8](https://github.com/helleroy/shoppinglist/compare/v1.2.7...v1.2.8) (2020-03-21)
 
 
