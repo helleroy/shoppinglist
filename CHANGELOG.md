@@ -1,3 +1,10 @@
+## [1.2.7](https://github.com/helleroy/shoppinglist/compare/v1.2.6...v1.2.7) (2020-03-21)
+
+
+### Bug Fixes
+
+* use default FIREBASE_TOKEN env variable when deploying ([29e8a59](https://github.com/helleroy/shoppinglist/commit/29e8a59dcbc7685eee11cf67bdc5d32ffd5a475f))
+
 ## [1.2.6](https://github.com/helleroy/shoppinglist/compare/v1.2.5...v1.2.6) (2020-03-21)
 
 
