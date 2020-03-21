@@ -15,8 +15,9 @@ export class FirebaseApp {
       authDomain: "handleliste-f03d5.firebaseapp.com",
       databaseURL: "https://handleliste-f03d5.firebaseio.com",
       projectId: "handleliste-f03d5",
-      storageBucket: "",
-      messagingSenderId: "653122939571"
+      storageBucket: "handleliste-f03d5.appspot.com",
+      messagingSenderId: "653122939571",
+      appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
     });
 
     this._db = firebase.firestore(this._app);
