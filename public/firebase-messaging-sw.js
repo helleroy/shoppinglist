@@ -8,10 +8,17 @@ importScripts(
   "https://www.gstatic.com/firebasejs/7.12.0/firebase-messaging.js"
 );
 
-// Initialize the Firebase app in the service worker by passing in the
-// messagingSenderId.
+// Initialize the Firebase app in the service worker by passing in
+// your app's Firebase config object.
+// https://firebase.google.com/docs/web/setup#config-object
 firebase.initializeApp({
-  messagingSenderId: "653122939571"
+  apiKey: "AIzaSyC75sci6JhjJtxF5773owNIyIkVKEvw78U",
+  authDomain: "handleliste-f03d5.firebaseapp.com",
+  databaseURL: "https://handleliste-f03d5.firebaseio.com",
+  projectId: "handleliste-f03d5",
+  storageBucket: "handleliste-f03d5.appspot.com",
+  messagingSenderId: "653122939571",
+  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
