@@ -9,7 +9,17 @@ import { BrowserLocalStorageAdapter } from "./adapters/BrowserLocalStorageAdapte
 import { MessagingAdapter } from "./adapters/MessagingAdapter";
 import { MessagingService } from "./services/MessagingService";
 
-const firebaseApp = new FirebaseApp();
+const firebaseOptions = {
+  apiKey: "AIzaSyC75sci6JhjJtxF5773owNIyIkVKEvw78U",
+  authDomain: "handleliste-f03d5.firebaseapp.com",
+  databaseURL: "https://handleliste-f03d5.firebaseio.com",
+  projectId: "handleliste-f03d5",
+  storageBucket: "handleliste-f03d5.appspot.com",
+  messagingSenderId: "653122939571",
+  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
+};
+
+const firebaseApp = new FirebaseApp(firebaseOptions);
 
 const shoppingListAdapter = new ShoppingListAdapter(firebaseApp.db);
 
@@ -23,7 +33,7 @@ const authenticationAdapter = new AuthenticationAdapter(firebaseApp.auth);
 
 const messagingAdapter = new MessagingAdapter(
   firebaseApp.messaging,
-  firebaseApp.app.options.projectId
+  firebaseApp.options.projectId
 );
 
 export const messagingService = new MessagingService(

@@ -1,15 +1,18 @@
 export class MessagingAdapter {
-  _messaging;
-  _projectId;
+  _messaging: firebase.messaging.Messaging | null;
+  _projectId: string;
 
-  constructor(messaging, projectId) {
+  constructor(
+    messaging: firebase.messaging.Messaging | null,
+    projectId: string
+  ) {
     this._messaging = messaging;
     this._projectId = projectId;
   }
 
-  onMessage(callback) {
+  onMessage(callback: Function) {
     if (this._messaging) {
-      this._messaging.onMessage(payload => {
+      this._messaging.onMessage((payload: object) => {
         console.log("Received message", payload);
         callback(payload);
       });
@@ -42,7 +45,7 @@ export class MessagingAdapter {
     }
   }
 
-  listenForRefreshedToken(callback) {
+  listenForRefreshedToken(callback: Function) {
     if (this._messaging) {
       this._messaging.onTokenRefresh(async () => {
         callback(await this.getToken());

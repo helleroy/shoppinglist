@@ -1,17 +1,17 @@
 export class BrowserLocalStorageAdapter {
-  _localStorage;
+  _localStorage: Storage;
 
-  constructor(localStorage) {
+  constructor(localStorage: Storage) {
     this._localStorage = localStorage;
   }
 
-  setItem(key, value) {
+  setItem(key: string, value: string) {
     if (value) {
       this._localStorage.setItem(key, JSON.stringify(value));
     }
   }
 
-  getItem(key) {
+  getItem(key: string) {
     const value = this._localStorage.getItem(key);
     if (value) {
       return JSON.parse(value);

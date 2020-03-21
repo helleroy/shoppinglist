@@ -1,47 +1,61 @@
 import React, { Component } from "react";
-import { arrayMove } from "react-sortable-hoc";
+import { arrayMove, SortEnd } from "react-sortable-hoc";
 import "./App.css";
 import {
   authenticationService,
   listService,
-  userService,
-  messagingService
+  messagingService,
+  userService
 } from "./context";
 import WelcomeJumbotron from "./components/WelcomeJumbotron";
 import AppHeader from "./components/AppHeader";
 import ShoppingLists from "./components/ShoppingLists";
 import { mergeShoppingLists } from "./utils/shoppingLists";
+import { Message, ShoppingList, SignedInUser } from "./types";
 
-const initialState = {
+interface State {
+  user: SignedInUser | null;
+  ownedShoppingLists: Array<ShoppingList>;
+  sharedShoppingLists: Array<ShoppingList>;
+  shoppingLists: Array<ShoppingList>;
+  notification: Message | null;
+}
+
+const initialState: State = {
   user: null,
   ownedShoppingLists: [],
   sharedShoppingLists: [],
-  shoppingLists: []
+  shoppingLists: [],
+  notification: null
 };
 
-class App extends Component {
-  constructor() {
-    super();
+class App extends Component<{}, State> {
+  constructor(props: {}) {
+    super(props);
 
     this.state = initialState;
   }
 
   componentDidMount() {
-    authenticationService.handleAuthStateChanged(async user => {
+    authenticationService.handleAuthStateChanged(async (user: SignedInUser) => {
       if (user) {
         this.setState({ user });
 
         userService.updateUser(user);
-        listService.ownedShoppingListListener(user, ownedShoppingLists =>
-          this.updateOwnedLists(ownedShoppingLists)
+        listService.ownedShoppingListListener(
+          user,
+          (ownedShoppingLists: Array<ShoppingList>) =>
+            this.updateOwnedLists(ownedShoppingLists)
         );
-        listService.sharedShoppingListsListener(user, sharedShoppingLists =>
-          this.updateSharedLists(sharedShoppingLists)
+        listService.sharedShoppingListsListener(
+          user,
+          (sharedShoppingLists: Array<ShoppingList>) =>
+            this.updateSharedLists(sharedShoppingLists)
         );
 
         messagingService.requestPermission(user);
         messagingService.listenForRefreshedToken(user);
-        messagingService.onMessage(message => {
+        messagingService.onMessage((message: Message) => {
           this.setState({ notification: message });
         });
       } else {
@@ -56,7 +70,7 @@ class App extends Component {
     authenticationService.unsubscribeAuthStateChangedListener();
   }
 
-  updateOwnedLists = ownedShoppingLists => {
+  updateOwnedLists = (ownedShoppingLists: Array<ShoppingList>) => {
     const mergedShoppingLists = mergeShoppingLists(
       this.state.sharedShoppingLists,
       ownedShoppingLists
@@ -66,7 +80,7 @@ class App extends Component {
     this.updateShoppingLists(mergedShoppingLists);
   };
 
-  updateSharedLists = sharedShoppingLists => {
+  updateSharedLists = (sharedShoppingLists: Array<ShoppingList>) => {
     const mergedShoppingLists = mergeShoppingLists(
       this.state.ownedShoppingLists,
       sharedShoppingLists
@@ -76,7 +90,7 @@ class App extends Component {
     this.updateShoppingLists(mergedShoppingLists);
   };
 
-  updateShoppingLists = updatedShoppingLists => {
+  updateShoppingLists = (updatedShoppingLists: Array<ShoppingList>) => {
     const shoppingLists = listService.restoreShoppingListOrder(
       updatedShoppingLists
     );
@@ -84,7 +98,7 @@ class App extends Component {
     this.setState({ shoppingLists });
   };
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
+  onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
     const shoppingLists = arrayMove(
       this.state.shoppingLists,
       oldIndex,

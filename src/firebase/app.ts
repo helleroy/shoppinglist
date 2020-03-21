@@ -3,22 +3,27 @@ import "firebase/firestore";
 import "firebase/auth";
 import "firebase/messaging";
 
-export class FirebaseApp {
-  _app;
-  _db;
-  _auth;
-  _messaging;
+interface Options {
+  apiKey: string;
+  authDomain: string;
+  databaseURL: string;
+  projectId: string;
+  storageBucket: string;
+  messagingSenderId: string;
+  appId: string;
+}
 
-  constructor() {
-    this._app = firebase.initializeApp({
-      apiKey: "AIzaSyC75sci6JhjJtxF5773owNIyIkVKEvw78U",
-      authDomain: "handleliste-f03d5.firebaseapp.com",
-      databaseURL: "https://handleliste-f03d5.firebaseio.com",
-      projectId: "handleliste-f03d5",
-      storageBucket: "handleliste-f03d5.appspot.com",
-      messagingSenderId: "653122939571",
-      appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
-    });
+export class FirebaseApp {
+  _options: Options;
+  _app: firebase.app.App;
+  _db: firebase.firestore.Firestore;
+  _auth: firebase.auth.Auth;
+  _messaging: firebase.messaging.Messaging | null = null;
+
+  constructor(options: Options) {
+    this._options = options;
+
+    this._app = firebase.initializeApp(options);
 
     this._db = firebase.firestore(this._app);
 
@@ -31,6 +36,10 @@ export class FirebaseApp {
         "BIlIsfvbhieh8dLuLLmgnEd852fZc-0x7A8hffbsAz_1zB92yxKVj4uyp-ZyB2FZ3hY98h4eQilwZ9u4SernMNo"
       );
     }
+  }
+
+  get options() {
+    return this._options;
   }
 
   get app() {

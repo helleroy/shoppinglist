@@ -1,13 +1,14 @@
 import { docWithId } from "../utils/firebase";
+import { ShoppingList, ShoppingListItem, SignedInUser, User } from "../types";
 
 export class ShoppingListAdapter {
-  _db;
+  _db: firebase.firestore.Firestore;
 
-  constructor(db) {
+  constructor(db: firebase.firestore.Firestore) {
     this._db = db;
   }
 
-  async createShoppingList(user, name) {
+  async createShoppingList(user: SignedInUser, name: string) {
     try {
       return this._db
         .collection("shoppinglists")
@@ -17,7 +18,7 @@ export class ShoppingListAdapter {
     }
   }
 
-  async removeShoppingList(shoppingList) {
+  async removeShoppingList(shoppingList: ShoppingList) {
     try {
       return this._db.doc(`shoppinglists/${shoppingList.id}`).delete();
     } catch (error) {
@@ -25,7 +26,7 @@ export class ShoppingListAdapter {
     }
   }
 
-  async removeAllItemsFromShoppingList(shoppingList) {
+  async removeAllItemsFromShoppingList(shoppingList: ShoppingList) {
     try {
       const itemsSnapshot = await this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
@@ -41,7 +42,10 @@ export class ShoppingListAdapter {
     }
   }
 
-  async addItemToShoppingList(shoppingList, item) {
+  async addItemToShoppingList(
+    shoppingList: ShoppingList,
+    item: ShoppingListItem
+  ) {
     try {
       return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
@@ -51,7 +55,10 @@ export class ShoppingListAdapter {
     }
   }
 
-  async removeItemFromShoppingList(shoppingList, item) {
+  async removeItemFromShoppingList(
+    shoppingList: ShoppingList,
+    item: ShoppingListItem
+  ) {
     try {
       return this._db
         .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
@@ -61,7 +68,7 @@ export class ShoppingListAdapter {
     }
   }
 
-  async updateListName(shoppingList, name) {
+  async updateListName(shoppingList: ShoppingList, name: string) {
     try {
       return this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
     } catch (error) {
@@ -69,7 +76,7 @@ export class ShoppingListAdapter {
     }
   }
 
-  async updateSharedWith(shoppingList, users) {
+  async updateSharedWith(shoppingList: ShoppingList, users: Array<User>) {
     try {
       const userIds = users.map(u => u.id);
 
@@ -81,7 +88,7 @@ export class ShoppingListAdapter {
     }
   }
 
-  async updateItem(shoppingList, item) {
+  async updateItem(shoppingList: ShoppingList, item: ShoppingListItem) {
     const updatedItem = { name: item.name, checked: item.checked };
 
     try {
@@ -93,7 +100,10 @@ export class ShoppingListAdapter {
     }
   }
 
-  ownedShoppingListListener(user, callback) {
+  ownedShoppingListListener(
+    user: SignedInUser,
+    callback: (shoppingLists: Array<ShoppingList>) => void
+  ) {
     try {
       return this._db
         .collection("shoppinglists")
@@ -107,7 +117,10 @@ export class ShoppingListAdapter {
     }
   }
 
-  sharedShoppingListsListener(user, callback) {
+  sharedShoppingListsListener(
+    user: SignedInUser,
+    callback: (shoppingLists: Array<ShoppingList>) => void
+  ) {
     try {
       return this._db
         .collection("shoppinglists")
@@ -121,7 +134,10 @@ export class ShoppingListAdapter {
     }
   }
 
-  itemListener(shoppingList, callback) {
+  itemListener(
+    shoppingList: ShoppingList,
+    callback: (items: Array<ShoppingListItem>) => void
+  ) {
     try {
       return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)

@@ -1,9 +1,9 @@
 import firebase from "firebase/app";
 
 export class AuthenticationAdapter {
-  _auth;
+  _auth: firebase.auth.Auth;
 
-  constructor(auth) {
+  constructor(auth: firebase.auth.Auth) {
     this._auth = auth;
   }
 
@@ -17,7 +17,7 @@ export class AuthenticationAdapter {
     }
   }
 
-  authStateChangedListener(callback) {
+  authStateChangedListener(callback: (user: firebase.User | null) => any) {
     try {
       return this._auth.onAuthStateChanged(callback);
     } catch (error) {

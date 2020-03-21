@@ -1,13 +1,14 @@
 import { docWithId } from "../utils/firebase";
+import { SignedInUser } from "../types";
 
 export class UserAdapter {
-  _db;
+  _db: firebase.firestore.Firestore;
 
-  constructor(db) {
+  constructor(db: firebase.firestore.Firestore) {
     this._db = db;
   }
 
-  async updateUser(user) {
+  async updateUser(user: SignedInUser) {
     const { displayName, email, photoURL } = user;
     try {
       return this._db
@@ -18,7 +19,7 @@ export class UserAdapter {
     }
   }
 
-  async updateMessagingToken(user, messagingToken) {
+  async updateMessagingToken(user: SignedInUser, messagingToken: string) {
     try {
       return this._db.doc(`users/${user.uid}`).update({ messagingToken });
     } catch (error) {
@@ -26,7 +27,7 @@ export class UserAdapter {
     }
   }
 
-  async getUserById(id) {
+  async getUserById(id: string) {
     try {
       const doc = await this._db.doc(`users/${id}`).get();
 
@@ -40,7 +41,7 @@ export class UserAdapter {
     }
   }
 
-  async getUserByEmail(email) {
+  async getUserByEmail(email: string) {
     try {
       const snapshot = await this._db
         .collection("users")
