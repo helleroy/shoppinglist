@@ -3,6 +3,31 @@
   "version": "1.2.8",
   "private": true,
   "repository": "https://github.com/helleroy/shoppinglist",
+  "scripts": {
+    "build": "react-scripts build",
+    "clean": "rm -rf node_modules && rm -rf functions/node_modules",
+    "deploy": "firebase deploy",
+    "eject": "react-scripts eject",
+    "prepare": "cd functions && npm install",
+    "release": "semantic-release",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "eslintConfig": {
+    "extends": "react-app"
+  },
   "dependencies": {
     "firebase": "^7.12.0",
     "lodash": "^4.17.15",
@@ -12,25 +37,6 @@
     "react-scripts": "^3.4.1",
     "react-sortable-hoc": "^1.11.0"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "clean": "rm -rf node_modules && rm -rf functions/node_modules",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "release": "semantic-release",
-    "deploy": "firebase deploy",
-    "prepare": "cd functions && npm install"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
@@ -45,11 +51,5 @@
     "prettier": "^1.19.1",
     "pretty-quick": "^2.0.1",
     "semantic-release": "^17.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   }
 }
