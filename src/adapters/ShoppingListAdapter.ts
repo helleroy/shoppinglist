@@ -1,4 +1,3 @@
-import { docWithId } from "../utils/firebase";
 import { ShoppingList, ShoppingListItem, SignedInUser, User } from "../types";
 
 export class ShoppingListAdapter {
@@ -108,8 +107,8 @@ export class ShoppingListAdapter {
       return this._db
         .collection("shoppinglists")
         .where("owner", "==", user.uid)
-        .onSnapshot(async querySnapshot => {
-          const shoppingLists = querySnapshot.docs.map(docWithId);
+        .onSnapshot(snapshot => {
+          const shoppingLists = snapshot.docs.map(mapShoppingList);
           callback(shoppingLists);
         });
     } catch (error) {
@@ -125,8 +124,8 @@ export class ShoppingListAdapter {
       return this._db
         .collection("shoppinglists")
         .where("sharedWith", "array-contains", user.uid)
-        .onSnapshot(async querySnapshot => {
-          const shoppingLists = querySnapshot.docs.map(docWithId);
+        .onSnapshot(snapshot => {
+          const shoppingLists = snapshot.docs.map(mapShoppingList);
           callback(shoppingLists);
         });
     } catch (error) {
@@ -141,12 +140,33 @@ export class ShoppingListAdapter {
     try {
       return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
-        .onSnapshot(querySnapshot => {
-          const items = querySnapshot.docs.map(docWithId);
+        .onSnapshot(snapshot => {
+          const items = snapshot.docs.map(mapShoppingListItem);
           callback(items);
         });
     } catch (error) {
       console.log(error);
     }
   }
+}
+
+function mapShoppingList(
+  document: firebase.firestore.QueryDocumentSnapshot
+): ShoppingList {
+  return {
+    id: document.id,
+    name: document.data().name,
+    owner: document.data().owner,
+    sharedWith: document.data().sharedWith
+  };
+}
+
+function mapShoppingListItem(
+  document: firebase.firestore.QueryDocumentSnapshot
+): ShoppingListItem {
+  return {
+    id: document.id,
+    name: document.data().name,
+    checked: document.data().checked
+  };
 }
