@@ -1,3 +1,6 @@
+import firebase from "firebase";
+import { Message } from "../types";
+
 export class MessagingAdapter {
   _messaging: firebase.messaging.Messaging | null;
   _projectId: string;
@@ -10,26 +13,24 @@ export class MessagingAdapter {
     this._projectId = projectId;
   }
 
-  onMessage(callback: Function) {
+  onMessage(callback: (message: Message) => void): void {
     if (this._messaging) {
-      this._messaging.onMessage((payload: object) => {
+      this._messaging.onMessage((payload: any) => {
         console.log("Received message", payload);
         callback(payload);
       });
     }
   }
 
-  async requestPermission() {
+  async requestPermission(): Promise<void> {
     try {
-      if (this._messaging) {
-        await this._messaging.requestPermission();
-      }
+      await Notification.requestPermission();
     } catch (error) {
       throw error;
     }
   }
 
-  async getToken() {
+  async getToken(): Promise<string | void> {
     try {
       if (this._messaging) {
         const currentToken = await this._messaging.getToken();
@@ -45,10 +46,13 @@ export class MessagingAdapter {
     }
   }
 
-  listenForRefreshedToken(callback: Function) {
+  listenForRefreshedToken(callback: (token: string) => void): void {
     if (this._messaging) {
       this._messaging.onTokenRefresh(async () => {
-        callback(await this.getToken());
+        let token = await this.getToken();
+        if (token) {
+          callback(token);
+        }
       });
     }
   }

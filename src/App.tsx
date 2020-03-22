@@ -37,31 +37,34 @@ class App extends Component<{}, State> {
   }
 
   componentDidMount() {
-    authenticationService.handleAuthStateChanged(async (user: SignedInUser) => {
-      if (user) {
-        this.setState({ user });
+    authenticationService.handleAuthStateChanged(
+      (user: SignedInUser | null) => {
+        if (user) {
+          this.setState({ user });
 
-        userService.updateUser(user);
-        listService.ownedShoppingListListener(
-          user,
-          (ownedShoppingLists: Array<ShoppingList>) =>
-            this.updateOwnedLists(ownedShoppingLists)
-        );
-        listService.sharedShoppingListsListener(
-          user,
-          (sharedShoppingLists: Array<ShoppingList>) =>
-            this.updateSharedLists(sharedShoppingLists)
-        );
+          userService.updateUser(user);
 
-        messagingService.requestPermission(user);
-        messagingService.listenForRefreshedToken(user);
-        messagingService.onMessage((message: Message) => {
-          this.setState({ notification: message });
-        });
-      } else {
-        this.setState({ user: null });
+          listService.ownedShoppingListListener(
+            user,
+            (ownedShoppingLists: Array<ShoppingList>) =>
+              this.updateOwnedLists(ownedShoppingLists)
+          );
+          listService.sharedShoppingListsListener(
+            user,
+            (sharedShoppingLists: Array<ShoppingList>) =>
+              this.updateSharedLists(sharedShoppingLists)
+          );
+
+          messagingService.requestPermission(user);
+          messagingService.listenForRefreshedToken(user);
+          messagingService.onMessage((message: Message) => {
+            this.setState({ notification: message });
+          });
+        } else {
+          this.setState({ user: null });
+        }
       }
-    });
+    );
   }
 
   componentWillUnmount() {

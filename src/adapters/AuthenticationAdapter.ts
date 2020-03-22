@@ -7,7 +7,7 @@ export class AuthenticationAdapter {
     this._auth = auth;
   }
 
-  async signInWithGoogle() {
+  async signInWithGoogle(): Promise<void> {
     try {
       await this._auth.signInWithRedirect(
         new firebase.auth.GoogleAuthProvider()
@@ -17,7 +17,9 @@ export class AuthenticationAdapter {
     }
   }
 
-  authStateChangedListener(callback: (user: firebase.User | null) => any) {
+  authStateChangedListener(
+    callback: (user: firebase.User | null) => any
+  ): firebase.Unsubscribe | undefined {
     try {
       return this._auth.onAuthStateChanged(callback);
     } catch (error) {
@@ -25,7 +27,7 @@ export class AuthenticationAdapter {
     }
   }
 
-  async signOut() {
+  async signOut(): Promise<void> {
     try {
       await this._auth.signOut();
     } catch (error) {

@@ -1,4 +1,11 @@
-import { ShoppingList, ShoppingListItem, SignedInUser, User } from "../types";
+import firebase from "firebase";
+import {
+  BaseShoppingList,
+  ShoppingList,
+  ShoppingListItem,
+  SignedInUser,
+  User
+} from "../types";
 
 export class ShoppingListAdapter {
   _db: firebase.firestore.Firestore;
@@ -7,9 +14,9 @@ export class ShoppingListAdapter {
     this._db = db;
   }
 
-  async createShoppingList(user: SignedInUser, name: string) {
+  async createShoppingList(user: SignedInUser, name: string): Promise<void> {
     try {
-      return this._db
+      await this._db
         .collection("shoppinglists")
         .add({ owner: user.uid, name, sharedWith: [] });
     } catch (error) {
@@ -17,15 +24,17 @@ export class ShoppingListAdapter {
     }
   }
 
-  async removeShoppingList(shoppingList: ShoppingList) {
+  async removeShoppingList(shoppingList: ShoppingList): Promise<void> {
     try {
-      return this._db.doc(`shoppinglists/${shoppingList.id}`).delete();
+      await this._db.doc(`shoppinglists/${shoppingList.id}`).delete();
     } catch (error) {
       console.log(error);
     }
   }
 
-  async removeAllItemsFromShoppingList(shoppingList: ShoppingList) {
+  async removeAllItemsFromShoppingList(
+    shoppingList: ShoppingList
+  ): Promise<void> {
     try {
       const itemsSnapshot = await this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
@@ -44,9 +53,9 @@ export class ShoppingListAdapter {
   async addItemToShoppingList(
     shoppingList: ShoppingList,
     item: ShoppingListItem
-  ) {
+  ): Promise<void> {
     try {
-      return this._db
+      await this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
         .add({ name: item.name, checked: false });
     } catch (error) {
@@ -57,9 +66,9 @@ export class ShoppingListAdapter {
   async removeItemFromShoppingList(
     shoppingList: ShoppingList,
     item: ShoppingListItem
-  ) {
+  ): Promise<void> {
     try {
-      return this._db
+      await this._db
         .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
         .delete();
     } catch (error) {
@@ -67,19 +76,25 @@ export class ShoppingListAdapter {
     }
   }
 
-  async updateListName(shoppingList: ShoppingList, name: string) {
+  async updateListName(
+    shoppingList: ShoppingList,
+    name: string
+  ): Promise<void> {
     try {
-      return this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
+      await this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
     } catch (error) {
       console.log(error);
     }
   }
 
-  async updateSharedWith(shoppingList: ShoppingList, users: Array<User>) {
+  async updateSharedWith(
+    shoppingList: ShoppingList,
+    users: Array<User>
+  ): Promise<void> {
     try {
       const userIds = users.map(u => u.id);
 
-      return this._db
+      await this._db
         .doc(`shoppinglists/${shoppingList.id}`)
         .update({ sharedWith: userIds });
     } catch (error) {
@@ -87,11 +102,14 @@ export class ShoppingListAdapter {
     }
   }
 
-  async updateItem(shoppingList: ShoppingList, item: ShoppingListItem) {
+  async updateItem(
+    shoppingList: ShoppingList,
+    item: ShoppingListItem
+  ): Promise<void> {
     const updatedItem = { name: item.name, checked: item.checked };
 
     try {
-      return this._db
+      await this._db
         .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
         .update(updatedItem);
     } catch (error) {
@@ -101,8 +119,8 @@ export class ShoppingListAdapter {
 
   ownedShoppingListListener(
     user: SignedInUser,
-    callback: (shoppingLists: Array<ShoppingList>) => void
-  ) {
+    callback: (shoppingLists: Array<BaseShoppingList>) => void
+  ): firebase.Unsubscribe | undefined {
     try {
       return this._db
         .collection("shoppinglists")
@@ -118,8 +136,8 @@ export class ShoppingListAdapter {
 
   sharedShoppingListsListener(
     user: SignedInUser,
-    callback: (shoppingLists: Array<ShoppingList>) => void
-  ) {
+    callback: (shoppingLists: Array<BaseShoppingList>) => void
+  ): firebase.Unsubscribe | undefined {
     try {
       return this._db
         .collection("shoppinglists")
@@ -136,7 +154,7 @@ export class ShoppingListAdapter {
   itemListener(
     shoppingList: ShoppingList,
     callback: (items: Array<ShoppingListItem>) => void
-  ) {
+  ): firebase.Unsubscribe | undefined {
     try {
       return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
@@ -152,7 +170,7 @@ export class ShoppingListAdapter {
 
 function mapShoppingList(
   document: firebase.firestore.QueryDocumentSnapshot
-): ShoppingList {
+): BaseShoppingList {
   return {
     id: document.id,
     name: document.data().name,

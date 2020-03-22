@@ -14,11 +14,18 @@ export interface ShoppingListItem {
   name: string;
 }
 
+export interface BaseShoppingList {
+  id: string;
+  name: string;
+  owner: string;
+  sharedWith: Array<string>;
+}
+
 export interface ShoppingList {
   id: string;
   name: string;
-  owner: User;
+  owner?: User;
   sharedWith: Array<User>;
 }
 
-export interface Message {}
+export interface Message extends firebase.messaging.Messaging {}
