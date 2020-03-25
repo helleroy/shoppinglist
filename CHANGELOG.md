@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/helleroy/shoppinglist/compare/v1.2.9...v1.3.0) (2020-03-25)
+
+
+### Features
+
+* horizontal swipe to switch between lists ([b09532f](https://github.com/helleroy/shoppinglist/commit/b09532f8b326777c33b0988f91cd581860488fde))
+
 ## [1.2.9](https://github.com/helleroy/shoppinglist/compare/v1.2.8...v1.2.9) (2020-03-21)
 
 ### Bug Fixes
