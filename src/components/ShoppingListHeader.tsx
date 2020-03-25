@@ -46,11 +46,11 @@ function ShoppingListHeader(props: Props) {
       <div className="col-10">
         <div>
           <form
-            onSubmit={event => {
+            onSubmit={(event) => {
               setEditingListName(false);
               handleNameFormSubmit(event, list);
             }}
-            onBlur={event => {
+            onBlur={(event) => {
               setEditingListName(false);
               handleNameBlur(event, list);
             }}
@@ -95,7 +95,7 @@ function ShoppingListHeader(props: Props) {
             <div>
               <h4 className="lead m-0">Shared with</h4>
               <div className="d-flex flex-wrap justify-content-start">
-                {list.sharedWith.map(sharedUser => (
+                {list.sharedWith.map((sharedUser) => (
                   <div key={sharedUser.id} className="mt-2 mr-2">
                     <SharedUser
                       sharedUser={sharedUser}

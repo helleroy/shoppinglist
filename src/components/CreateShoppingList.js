@@ -10,7 +10,7 @@ class CreateShoppingList extends Component {
     this._listNameInputRef = React.createRef();
   }
 
-  handleSubmit = async event => {
+  handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);

@@ -8,11 +8,11 @@ class ShoppingListItem extends Component {
     this.state = { editable: false };
   }
 
-  updateItemRemote = item => {
+  updateItemRemote = (item) => {
     listService.updateItem(this.props.list, item);
   };
 
-  submitItemChange = event => {
+  submitItemChange = (event) => {
     event.preventDefault();
     const { item } = this.props;
 
@@ -65,7 +65,7 @@ class ShoppingListItem extends Component {
       <button
         type="button"
         className="btn btn-outline-info col-6"
-        onClick={event => {
+        onClick={(event) => {
           event.preventDefault();
           this.setState({ editable: true });
         }}

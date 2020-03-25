@@ -16,7 +16,7 @@ const firebaseOptions = {
   projectId: "handleliste-f03d5",
   storageBucket: "handleliste-f03d5.appspot.com",
   messagingSenderId: "653122939571",
-  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
+  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6",
 };
 
 const firebaseApp = new FirebaseApp(firebaseOptions);

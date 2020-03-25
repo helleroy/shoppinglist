@@ -6,7 +6,7 @@ import ShareShoppingList from "./ShareShoppingList";
 import {
   ShoppingList as ShoppingListType,
   ShoppingListItem as ShoppingListItemType,
-  SignedInUser
+  SignedInUser,
 } from "../types";
 
 interface Props {
@@ -52,14 +52,14 @@ function ShoppingList(props: Props) {
       </header>
       <main className="card-body">
         <div className="list-group">
-          {items.map(item => (
+          {items.map((item) => (
             <div key={item.id} className="mb-2">
               <ShoppingListItem list={list} item={item} />
             </div>
           ))}
         </div>
         <form
-          onSubmit={event => addNewItem(event, list)}
+          onSubmit={(event) => addNewItem(event, list)}
           className="form-group"
         >
           <div className="input-group">

@@ -11,6 +11,6 @@ ReactDOM.render(<App />, document.getElementById("root"));
 // Learn more about service workers: http://bit.ly/CRA-PWA
 const swConfig = {
   onUpdate: (registration: any) => {},
-  onSuccess: (registration: any) => {}
+  onSuccess: (registration: any) => {},
 };
 serviceWorker.register(swConfig);

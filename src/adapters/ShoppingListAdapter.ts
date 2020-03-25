@@ -4,7 +4,7 @@ import {
   ShoppingList,
   ShoppingListItem,
   SignedInUser,
-  User
+  User,
 } from "../types";
 
 export class ShoppingListAdapter {
@@ -42,7 +42,7 @@ export class ShoppingListAdapter {
 
       const batch = this._db.batch();
 
-      itemsSnapshot.forEach(doc => batch.delete(doc.ref));
+      itemsSnapshot.forEach((doc) => batch.delete(doc.ref));
 
       await batch.commit();
     } catch (error) {
@@ -92,7 +92,7 @@ export class ShoppingListAdapter {
     users: Array<User>
   ): Promise<void> {
     try {
-      const userIds = users.map(u => u.id);
+      const userIds = users.map((u) => u.id);
 
       await this._db
         .doc(`shoppinglists/${shoppingList.id}`)
@@ -125,7 +125,7 @@ export class ShoppingListAdapter {
       return this._db
         .collection("shoppinglists")
         .where("owner", "==", user.uid)
-        .onSnapshot(snapshot => {
+        .onSnapshot((snapshot) => {
           const shoppingLists = snapshot.docs.map(mapShoppingList);
           callback(shoppingLists);
         });
@@ -142,7 +142,7 @@ export class ShoppingListAdapter {
       return this._db
         .collection("shoppinglists")
         .where("sharedWith", "array-contains", user.uid)
-        .onSnapshot(snapshot => {
+        .onSnapshot((snapshot) => {
           const shoppingLists = snapshot.docs.map(mapShoppingList);
           callback(shoppingLists);
         });
@@ -158,7 +158,7 @@ export class ShoppingListAdapter {
     try {
       return this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
-        .onSnapshot(snapshot => {
+        .onSnapshot((snapshot) => {
           const items = snapshot.docs.map(mapShoppingListItem);
           callback(items);
         });
@@ -175,7 +175,7 @@ function mapShoppingList(
     id: document.id,
     name: document.data().name,
     owner: document.data().owner,
-    sharedWith: document.data().sharedWith
+    sharedWith: document.data().sharedWith,
   };
 }
 
@@ -185,6 +185,6 @@ function mapShoppingListItem(
   return {
     id: document.id,
     name: document.data().name,
-    checked: document.data().checked
+    checked: document.data().checked,
   };
 }

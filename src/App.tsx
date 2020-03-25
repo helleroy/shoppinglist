@@ -4,7 +4,7 @@ import {
   authenticationService,
   listService,
   messagingService,
-  userService
+  userService,
 } from "./context";
 import WelcomeJumbotron from "./components/WelcomeJumbotron";
 import AppHeader from "./components/AppHeader";
@@ -25,7 +25,7 @@ const initialState: State = {
   ownedShoppingLists: [],
   sharedShoppingLists: [],
   shoppingLists: [],
-  notification: null
+  notification: null,
 };
 
 class App extends Component<{}, State> {

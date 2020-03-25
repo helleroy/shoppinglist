@@ -10,7 +10,7 @@ class ShareShoppingList extends Component {
     this._emailInputRef = React.createRef();
   }
 
-  handleNewSharedUser = async event => {
+  handleNewSharedUser = async (event) => {
     event.preventDefault();
 
     const { signedInUser } = this.props;

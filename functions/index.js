@@ -22,7 +22,7 @@ async function getUserById(id) {
 
 exports.sharedWithNotification = functions.firestore
   .document("shoppinglists/{shoppingListId}")
-  .onUpdate(async change => {
+  .onUpdate(async (change) => {
     const afterDocument = change.after.data();
 
     const sharedWithBefore = change.before.data().sharedWith;
@@ -41,15 +41,15 @@ exports.sharedWithNotification = functions.firestore
     const messagePayload = {
       data: {
         title: `${afterDocument.name} was shared with you`,
-        body: `Someone shared the ${afterDocument.name} list with you`
-      }
+        body: `Someone shared the ${afterDocument.name} list with you`,
+      },
     };
 
     const users = await Promise.all(
-      newUsersSharedWith.map(id => getUserById(id)).filter(user => !!user)
+      newUsersSharedWith.map((id) => getUserById(id)).filter((user) => !!user)
     );
 
-    const messagingTokens = users.map(user => user.messagingToken);
+    const messagingTokens = users.map((user) => user.messagingToken);
 
     await messaging.sendToDevice(messagingTokens, messagePayload);
   });

@@ -18,7 +18,7 @@ firebase.initializeApp({
   projectId: "handleliste-f03d5",
   storageBucket: "handleliste-f03d5.appspot.com",
   messagingSenderId: "653122939571",
-  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6"
+  appId: "1:653122939571:web:b2d611dd62cf7a00299ec6",
 });
 
 // Retrieve an instance of Firebase Messaging so that it can handle background
@@ -26,18 +26,18 @@ firebase.initializeApp({
 if (firebase.messaging.isSupported()) {
   const messaging = firebase.messaging();
 
-  messaging.setBackgroundMessageHandler(function(payload) {
+  messaging.setBackgroundMessageHandler(function (payload) {
     const { title, body } = payload.data;
     const options = {
       body,
-      icon: "/favicon.ico"
+      icon: "/favicon.ico",
     };
 
     return self.registration.showNotification(title, options);
   });
 }
 
-self.addEventListener("notificationclick", function(event) {
+self.addEventListener("notificationclick", function (event) {
   event.notification.close();
 
   // This looks to see if the current is already open and
@@ -46,9 +46,9 @@ self.addEventListener("notificationclick", function(event) {
     clients
       .matchAll({
         includeUncontrolled: true,
-        type: "window"
+        type: "window",
       })
-      .then(function(clientList) {
+      .then(function (clientList) {
         for (let i = 0; i < clientList.length; i++) {
           const client = clientList[i];
 

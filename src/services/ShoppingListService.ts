@@ -9,7 +9,7 @@ import {
   ShoppingList,
   ShoppingListItem,
   SignedInUser,
-  User
+  User,
 } from "../types";
 
 const LIST_ORDER_KEY = "shoppinglist-order";
@@ -162,7 +162,7 @@ export class ShoppingListService {
     if (shoppingListOrder) {
       return _.sortBy(
         shoppingLists,
-        shoppingList => shoppingListOrder[shoppingList.id]
+        (shoppingList) => shoppingListOrder[shoppingList.id]
       );
     }
 
@@ -173,9 +173,9 @@ export class ShoppingListService {
     baseShoppingLists: Array<BaseShoppingList>
   ): Promise<Array<ShoppingList>> {
     const userByIdPromises = _.chain(baseShoppingLists)
-      .flatMap(list => [...list.sharedWith, list.owner])
+      .flatMap((list) => [...list.sharedWith, list.owner])
       .uniq()
-      .map(userId => this._userAdapter.getUserById(userId))
+      .map((userId) => this._userAdapter.getUserById(userId))
       .value();
 
     const isUser = (user: User | null): user is User => user !== null;
@@ -184,14 +184,14 @@ export class ShoppingListService {
 
     const usersById = _.keyBy(uniqueNonNullUsers, "id");
 
-    return baseShoppingLists.map(list => {
+    return baseShoppingLists.map((list) => {
       return {
         id: list.id,
         name: list.name,
         owner: usersById[list.owner] || undefined,
-        sharedWith: list.sharedWith.map(userId => {
+        sharedWith: list.sharedWith.map((userId) => {
           return usersById[userId];
-        })
+        }),
       };
     });
   }
@@ -205,7 +205,7 @@ export class ShoppingListService {
     try {
       this._ownedShoppingListUnsubscribe = this._shoppingListAdapter.ownedShoppingListListener(
         user,
-        async shoppingLists => {
+        async (shoppingLists) => {
           const shoppingListsWithUsers = await this.populateUserData(
             shoppingLists
           );
@@ -226,7 +226,7 @@ export class ShoppingListService {
     try {
       this._sharedShoppingListUnsubscribe = this._shoppingListAdapter.sharedShoppingListsListener(
         user,
-        async shoppingLists => {
+        async (shoppingLists) => {
           const shoppingListsWithUsers = await this.populateUserData(
             shoppingLists
           );

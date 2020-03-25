@@ -72,7 +72,7 @@ function mapUser(document: firebase.firestore.DocumentSnapshot): User | null {
       displayName: data.displayName,
       email: data.email,
       messagingToken: data.messagingToken,
-      photoURL: data.photoURL
+      photoURL: data.photoURL,
     };
   }
 
