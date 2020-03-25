@@ -54,10 +54,13 @@ export class ShoppingListService {
 
   async addItemToShoppingList(
     shoppingList: ShoppingList,
-    item: ShoppingListItem
+    itemName: string
   ): Promise<void> {
     try {
-      await this._shoppingListAdapter.addItemToShoppingList(shoppingList, item);
+      await this._shoppingListAdapter.addItemToShoppingList(
+        shoppingList,
+        itemName
+      );
     } catch (error) {
       console.log(error);
     }

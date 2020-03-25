@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { arrayMove, SortEnd } from "react-sortable-hoc";
 import "./App.css";
 import {
   authenticationService,
@@ -101,23 +100,11 @@ class App extends Component<{}, State> {
     this.setState({ shoppingLists });
   };
 
-  onSortEnd = ({ oldIndex, newIndex }: SortEnd) => {
-    const shoppingLists = arrayMove(
-      this.state.shoppingLists,
-      oldIndex,
-      newIndex
-    );
-
-    this.setState({ shoppingLists });
-
-    listService.saveShoppingListOrder(shoppingLists);
-  };
-
   render() {
     const { user, shoppingLists } = this.state;
 
     return (
-      <div className="container">
+      <div className="my-3">
         <header>
           <AppHeader
             user={user}
@@ -125,15 +112,9 @@ class App extends Component<{}, State> {
             onSignOut={() => this.setState(initialState)}
           />
         </header>
-        <main className="main row">
-          <div className="col">
-            {shoppingLists.length === 0 && <WelcomeJumbotron user={user} />}
-            <ShoppingLists
-              items={shoppingLists}
-              user={user}
-              onSortEnd={this.onSortEnd}
-            />
-          </div>
+        <main>
+          {shoppingLists.length === 0 && <WelcomeJumbotron user={user} />}
+          <ShoppingLists items={shoppingLists} user={user} />
         </main>
       </div>
     );

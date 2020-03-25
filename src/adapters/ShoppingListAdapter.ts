@@ -52,12 +52,12 @@ export class ShoppingListAdapter {
 
   async addItemToShoppingList(
     shoppingList: ShoppingList,
-    item: ShoppingListItem
+    itemName: string
   ): Promise<void> {
     try {
       await this._db
         .collection(`shoppinglists/${shoppingList.id}/items`)
-        .add({ name: item.name, checked: false });
+        .add({ name: itemName, checked: false });
     } catch (error) {
       console.log(error);
     }
