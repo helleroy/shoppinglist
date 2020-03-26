@@ -8,6 +8,11 @@
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
 
+interface Config {
+  onUpdate: (registration: ServiceWorkerRegistration) => void;
+  onSuccess: (registration: ServiceWorkerRegistration) => void;
+}
+
 const isLocalhost = Boolean(
   window.location.hostname === "localhost" ||
     // [::1] is the IPv6 localhost address.
@@ -18,10 +23,10 @@ const isLocalhost = Boolean(
     )
 );
 
-export function register(config) {
+export function register(config: Config) {
   if (process.env.NODE_ENV === "production" && "serviceWorker" in navigator) {
     // The URL constructor is available in all browsers that support SW.
-    const publicUrl = new URL(process.env.PUBLIC_URL, window.location);
+    const publicUrl = new URL(process.env.PUBLIC_URL, window.location.href);
     if (publicUrl.origin !== window.location.origin) {
       // Our service worker won't work if PUBLIC_URL is on a different origin
       // from what our page is served on. This might happen if a CDN is used to
@@ -52,38 +57,40 @@ export function register(config) {
   }
 }
 
-function registerValidSW(swUrl, config) {
+function registerValidSW(swUrl: string, config: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
-        installingWorker.onstatechange = () => {
-          if (installingWorker.state === "installed") {
-            if (navigator.serviceWorker.controller) {
-              // At this point, the old content will have been purged and
-              // the fresh content will have been added to the cache.
-              // It's the perfect time to display a "New content is
-              // available; please refresh." message in your web app.
-              console.log("New content is available; please refresh.");
+        if (installingWorker) {
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === "installed") {
+              if (navigator.serviceWorker.controller) {
+                // At this point, the old content will have been purged and
+                // the fresh content will have been added to the cache.
+                // It's the perfect time to display a "New content is
+                // available; please refresh." message in your web app.
+                console.log("New content is available; please refresh.");
 
-              // Execute callback
-              if (config.onUpdate) {
-                config.onUpdate(registration);
-              }
-            } else {
-              // At this point, everything has been precached.
-              // It's the perfect time to display a
-              // "Content is cached for offline use." message.
-              console.log("Content is cached for offline use.");
+                // Execute callback
+                if (config.onUpdate) {
+                  config.onUpdate(registration);
+                }
+              } else {
+                // At this point, everything has been precached.
+                // It's the perfect time to display a
+                // "Content is cached for offline use." message.
+                console.log("Content is cached for offline use.");
 
-              // Execute callback
-              if (config.onSuccess) {
-                config.onSuccess(registration);
+                // Execute callback
+                if (config.onSuccess) {
+                  config.onSuccess(registration);
+                }
               }
             }
-          }
-        };
+          };
+        }
       };
     })
     .catch((error) => {
@@ -91,15 +98,13 @@ function registerValidSW(swUrl, config) {
     });
 }
 
-function checkValidServiceWorker(swUrl, config) {
+function checkValidServiceWorker(swUrl: string, config: Config) {
   // Check if the service worker can be found. If it can't reload the page.
   fetch(swUrl)
     .then((response) => {
       // Ensure service worker exists, and that we really are getting a JS file.
-      if (
-        response.status === 404 ||
-        response.headers.get("content-type").indexOf("javascript") === -1
-      ) {
+      const content = response.headers.get("content-type") as string;
+      if (response.status === 404 || content.indexOf("javascript") === -1) {
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then((registration) => {
           registration.unregister().then(() => {
