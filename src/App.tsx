@@ -112,7 +112,7 @@ class App extends Component<{}, State> {
     const { user, shoppingLists } = this.state;
 
     return (
-      <div className="my-3">
+      <div className="pt-3">
         <header>
           <AppHeader
             user={user}

@@ -17,7 +17,7 @@ function ShoppingLists(props: Props) {
   }
 
   return (
-    <div className="snap-scrollable-container-horizontal">
+    <div className="snap-scrollable-container-horizontal pb-3">
       {shoppingLists.map((list, index) => (
         <ShoppingList
           key={list.id}
