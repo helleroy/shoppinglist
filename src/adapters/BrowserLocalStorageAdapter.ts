@@ -5,7 +5,7 @@ export class BrowserLocalStorageAdapter {
     this._localStorage = localStorage;
   }
 
-  setItem(key: string, value: string): void {
+  setItem(key: string, value: any): void {
     if (value) {
       this._localStorage.setItem(key, JSON.stringify(value));
     }

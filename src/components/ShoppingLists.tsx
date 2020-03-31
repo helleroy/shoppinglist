@@ -1,14 +1,16 @@
 import React from "react";
 import ShoppingList from "./ShoppingList";
-import { SignedInUser, ShoppingList as ShoppingListType } from "../types";
+import { ShoppingList as ShoppingListType, SignedInUser } from "../types";
+import { moveElementLeft, moveElementRight } from "../utils/list";
 
 interface Props {
-  items: Array<ShoppingListType>;
+  shoppingLists: Array<ShoppingListType>;
   user: SignedInUser | null;
+  onSort: (list: Array<ShoppingListType>) => void;
 }
 
 function ShoppingLists(props: Props) {
-  const { user, items } = props;
+  const { user, shoppingLists, onSort } = props;
 
   if (!user) {
     return null;
@@ -16,8 +18,22 @@ function ShoppingLists(props: Props) {
 
   return (
     <div className="snap-scrollable-container-horizontal">
-      {items.map((list: ShoppingListType) => (
-        <ShoppingList key={list.id} list={list} signedInUser={user} />
+      {shoppingLists.map((list, index) => (
+        <ShoppingList
+          key={list.id}
+          list={list}
+          signedInUser={user}
+          moveListLeft={
+            index > 0
+              ? () => onSort(moveElementLeft(shoppingLists, index))
+              : null
+          }
+          moveListRight={
+            index < shoppingLists.length - 1
+              ? () => onSort(moveElementRight(shoppingLists, index))
+              : null
+          }
+        />
       ))}
     </div>
   );

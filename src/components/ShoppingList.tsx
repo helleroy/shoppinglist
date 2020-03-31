@@ -12,6 +12,8 @@ import {
 interface Props {
   list: ShoppingListType;
   signedInUser: SignedInUser;
+  moveListLeft: (() => void) | null;
+  moveListRight: (() => void) | null;
 }
 
 async function addNewItem(
@@ -31,7 +33,7 @@ async function addNewItem(
 }
 
 function ShoppingList(props: Props) {
-  const { list, signedInUser } = props;
+  const { list, signedInUser, moveListLeft, moveListRight } = props;
 
   const [items, setItems] = useState<Array<ShoppingListItemType>>([]);
 
@@ -48,7 +50,12 @@ function ShoppingList(props: Props) {
   return (
     <div className="snap-scrollable-item">
       <header className="card-header">
-        <ShoppingListHeader list={list} signedInUser={signedInUser} />
+        <ShoppingListHeader
+          list={list}
+          signedInUser={signedInUser}
+          moveListLeft={moveListLeft}
+          moveListRight={moveListRight}
+        />
       </header>
       <main className="card-body">
         <div className="list-group">

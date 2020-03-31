@@ -7,6 +7,8 @@ import { ShoppingList, SignedInUser } from "../types";
 interface Props {
   list: ShoppingList;
   signedInUser: SignedInUser;
+  moveListLeft: (() => void) | null;
+  moveListRight: (() => void) | null;
 }
 
 function handleNameBlur(
@@ -36,7 +38,7 @@ function handleNameFormSubmit(
 }
 
 function ShoppingListHeader(props: Props) {
-  const { list, signedInUser } = props;
+  const { list, signedInUser, moveListLeft, moveListRight } = props;
 
   const [editingListName, setEditingListName] = useState(false);
   const [showListDetails, setShowListDetails] = useState(false);
@@ -109,13 +111,35 @@ function ShoppingListHeader(props: Props) {
           )}
         </Collapsible>
       </div>
-      <div className="d-flex flex-column col-2 justify-content-end">
+      <div className="d-flex flex-column col-2 justify-content-between align-items-center">
+        <div className="d-flex flex-row justify-content-center">
+          <button
+            type="button"
+            className={`button-transparent ${
+              !moveListLeft && "list-sort-disabled"
+            }`}
+            onClick={moveListLeft || (() => {})}
+          >
+            <i className="fas fa-chevron-left" />
+          </button>
+          <button
+            type="button"
+            className={`button-transparent ${
+              !moveListRight && "list-sort-disabled"
+            }`}
+            onClick={moveListRight || (() => {})}
+          >
+            <i className="fas fa-chevron-right" />
+          </button>
+        </div>
         <button
           type="button"
-          className={`list-details-toggle ${showListDetails && "rotate-180"}`}
+          className={`list-details-toggle button-transparent ${
+            showListDetails && "rotate-180"
+          }`}
           onClick={() => setShowListDetails(!showListDetails)}
         >
-          <i className="fas fa-arrow-down" />
+          <i className="fas fa-chevron-circle-down" />
         </button>
       </div>
     </div>

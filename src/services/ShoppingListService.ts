@@ -148,10 +148,7 @@ export class ShoppingListService {
       {}
     );
 
-    this._localStorageAdapter.setItem(
-      LIST_ORDER_KEY,
-      JSON.stringify(shoppingListOrder)
-    );
+    this._localStorageAdapter.setItem(LIST_ORDER_KEY, shoppingListOrder);
   }
 
   restoreShoppingListOrder(

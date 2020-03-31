@@ -100,6 +100,14 @@ class App extends Component<{}, State> {
     this.setState({ shoppingLists });
   };
 
+  onSort = (sortedShoppingLists: Array<ShoppingList>) => {
+    if (this.state.shoppingLists !== sortedShoppingLists) {
+      listService.saveShoppingListOrder(sortedShoppingLists);
+
+      this.setState({ shoppingLists: sortedShoppingLists });
+    }
+  };
+
   render() {
     const { user, shoppingLists } = this.state;
 
@@ -114,7 +122,11 @@ class App extends Component<{}, State> {
         </header>
         <main>
           {shoppingLists.length === 0 && <WelcomeJumbotron user={user} />}
-          <ShoppingLists items={shoppingLists} user={user} />
+          <ShoppingLists
+            shoppingLists={shoppingLists}
+            user={user}
+            onSort={this.onSort}
+          />
         </main>
       </div>
     );
