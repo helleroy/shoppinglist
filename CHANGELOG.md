@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/helleroy/shoppinglist/compare/v1.3.0...v1.4.0) (2020-03-31)
+
+
+### Bug Fixes
+
+* ensure scroll indicator is below the lists ([2370f44](https://github.com/helleroy/shoppinglist/commit/2370f44952180daaff2e959d2b6d78f85cacc8a4))
+
+
+### Features
+
+* buttons to sort list order ([81b3dcf](https://github.com/helleroy/shoppinglist/commit/81b3dcf4fe4251477cbc37427495190deef1ad37))
+
 # [1.3.0](https://github.com/helleroy/shoppinglist/compare/v1.2.9...v1.3.0) (2020-03-25)
 
 
