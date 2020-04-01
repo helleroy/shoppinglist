@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/helleroy/shoppinglist/compare/v1.4.0...v1.4.1) (2020-04-01)
+
+
+### Bug Fixes
+
+* scroll to focused list element when sorting ([1c2b7d4](https://github.com/helleroy/shoppinglist/commit/1c2b7d4cb51fc9467901be51b3584404b9e083ae))
+
 # [1.4.0](https://github.com/helleroy/shoppinglist/compare/v1.3.0...v1.4.0) (2020-03-31)
 
 
