@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, RefObject } from "react";
 import "./App.css";
 import {
   authenticationService,
@@ -100,11 +100,20 @@ class App extends Component<{}, State> {
     this.setState({ shoppingLists });
   };
 
-  onSort = (sortedShoppingLists: Array<ShoppingList>) => {
+  onSort = (
+    sortedShoppingLists: Array<ShoppingList>,
+    ref: RefObject<HTMLElement>
+  ) => {
     if (this.state.shoppingLists !== sortedShoppingLists) {
       listService.saveShoppingListOrder(sortedShoppingLists);
 
-      this.setState({ shoppingLists: sortedShoppingLists });
+      this.setState({ shoppingLists: sortedShoppingLists }, () => {
+        if (ref.current) {
+          ref.current.scrollIntoView({
+            behavior: "smooth",
+          });
+        }
+      });
     }
   };
 

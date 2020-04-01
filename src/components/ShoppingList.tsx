@@ -1,4 +1,10 @@
-import React, { FormEvent, useEffect, useState } from "react";
+import React, {
+  FormEvent,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { listService } from "../context";
 import ShoppingListItem from "./ShoppingListItem";
 import ShoppingListHeader from "./ShoppingListHeader";
@@ -12,8 +18,8 @@ import {
 interface Props {
   list: ShoppingListType;
   signedInUser: SignedInUser;
-  moveListLeft: (() => void) | null;
-  moveListRight: (() => void) | null;
+  moveListLeft: ((ref: RefObject<HTMLElement>) => void) | null;
+  moveListRight: ((ref: RefObject<HTMLElement>) => void) | null;
 }
 
 async function addNewItem(
@@ -36,6 +42,7 @@ function ShoppingList(props: Props) {
   const { list, signedInUser, moveListLeft, moveListRight } = props;
 
   const [items, setItems] = useState<Array<ShoppingListItemType>>([]);
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     listService.itemListener(list, setItems);
@@ -47,14 +54,25 @@ function ShoppingList(props: Props) {
 
   const canDelete = list.owner && signedInUser.uid === list.owner.id;
 
+  const moveLeft = moveListLeft
+    ? () => {
+        moveListLeft(ref);
+      }
+    : null;
+  const moveRight = moveListRight
+    ? () => {
+        moveListRight(ref);
+      }
+    : null;
+
   return (
-    <div className="snap-scrollable-item">
+    <div className="snap-scrollable-item" ref={ref}>
       <header className="card-header">
         <ShoppingListHeader
           list={list}
           signedInUser={signedInUser}
-          moveListLeft={moveListLeft}
-          moveListRight={moveListRight}
+          moveListLeft={moveLeft}
+          moveListRight={moveRight}
         />
       </header>
       <main className="card-body">

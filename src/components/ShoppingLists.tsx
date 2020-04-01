@@ -1,4 +1,4 @@
-import React from "react";
+import React, { RefObject } from "react";
 import ShoppingList from "./ShoppingList";
 import { ShoppingList as ShoppingListType, SignedInUser } from "../types";
 import { moveElementLeft, moveElementRight } from "../utils/list";
@@ -6,7 +6,7 @@ import { moveElementLeft, moveElementRight } from "../utils/list";
 interface Props {
   shoppingLists: Array<ShoppingListType>;
   user: SignedInUser | null;
-  onSort: (list: Array<ShoppingListType>) => void;
+  onSort: (list: Array<ShoppingListType>, ref: RefObject<HTMLElement>) => void;
 }
 
 function ShoppingLists(props: Props) {
@@ -25,12 +25,14 @@ function ShoppingLists(props: Props) {
           signedInUser={user}
           moveListLeft={
             index > 0
-              ? () => onSort(moveElementLeft(shoppingLists, index))
+              ? (ref: RefObject<HTMLElement>) =>
+                  onSort(moveElementLeft(shoppingLists, index), ref)
               : null
           }
           moveListRight={
             index < shoppingLists.length - 1
-              ? () => onSort(moveElementRight(shoppingLists, index))
+              ? (ref: RefObject<HTMLElement>) =>
+                  onSort(moveElementRight(shoppingLists, index), ref)
               : null
           }
         />
