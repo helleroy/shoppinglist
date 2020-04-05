@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/helleroy/shoppinglist/compare/v1.4.1...v1.4.2) (2020-04-05)
+
+
+### Bug Fixes
+
+* update dialog when service worker finds an update ([a346b89](https://github.com/helleroy/shoppinglist/commit/a346b891d79ba8401e6f8c0d301fa08b4f01112a))
+
 ## [1.4.1](https://github.com/helleroy/shoppinglist/compare/v1.4.0...v1.4.1) (2020-04-01)
 
 
