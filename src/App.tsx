@@ -12,6 +12,10 @@ import ShoppingLists from "./components/ShoppingLists";
 import { mergeShoppingLists } from "./utils/shoppingLists";
 import { Message, ShoppingList, SignedInUser } from "./types";
 
+interface Props {
+  updateFound: boolean;
+}
+
 interface State {
   user: SignedInUser | null;
   ownedShoppingLists: Array<ShoppingList>;
@@ -28,8 +32,8 @@ const initialState: State = {
   notification: null,
 };
 
-class App extends Component<{}, State> {
-  constructor(props: {}) {
+class App extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = initialState;
@@ -118,11 +122,22 @@ class App extends Component<{}, State> {
   };
 
   render() {
+    const { updateFound } = this.props;
     const { user, shoppingLists } = this.state;
 
     return (
       <div className="pt-3">
         <header>
+          {updateFound && (
+            <div className="alert alert-danger" role="alert">
+              <button
+                onClick={() => window.location.reload()}
+                className="btn btn-secondary"
+              >
+                Installer oppdatering
+              </button>
+            </div>
+          )}
           <AppHeader
             user={user}
             shoppingLists={shoppingLists}
