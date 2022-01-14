@@ -22,12 +22,6 @@ export class MessagingService {
     }
   }
 
-  listenForRefreshedToken(user: SignedInUser): void {
-    this._messagingAdapter.listenForRefreshedToken(async (token: string) => {
-      await this._userAdapter.updateMessagingToken(user, token);
-    });
-  }
-
   async requestPermission(user: SignedInUser): Promise<void> {
     try {
       await this._messagingAdapter.requestPermission();

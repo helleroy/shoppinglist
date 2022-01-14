@@ -1,7 +1,11 @@
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-import "firebase/messaging";
+import { FirebaseApp, FirebaseOptions, initializeApp } from "firebase/app";
+import { Firestore, getFirestore } from "firebase/firestore";
+import { Auth, getAuth } from "firebase/auth";
+import {
+  Messaging,
+  getMessaging,
+  isSupported as isMessagingSupported,
+} from "firebase/messaging";
 
 interface Options {
   apiKey: string;
@@ -13,29 +17,28 @@ interface Options {
   appId: string;
 }
 
-export class FirebaseApp {
-  _options: Options;
-  _app: firebase.app.App;
-  _db: firebase.firestore.Firestore;
-  _auth: firebase.auth.Auth;
-  _messaging: firebase.messaging.Messaging | null = null;
+export class Firebase {
+  _options: FirebaseOptions;
+  _app: FirebaseApp;
+  _db: Firestore;
+  _auth: Auth;
+  _messaging: Messaging | null = null;
 
   constructor(options: Options) {
     this._options = options;
 
-    this._app = firebase.initializeApp(options);
+    this._app = initializeApp(options);
 
-    this._db = firebase.firestore(this._app);
+    this._db = getFirestore(this._app);
 
-    this._auth = firebase.auth(this._app);
+    this._auth = getAuth(this._app);
     this._auth.useDeviceLanguage();
 
-    if (firebase.messaging.isSupported()) {
-      this._messaging = firebase.messaging();
-      this._messaging.usePublicVapidKey(
-        "BIlIsfvbhieh8dLuLLmgnEd852fZc-0x7A8hffbsAz_1zB92yxKVj4uyp-ZyB2FZ3hY98h4eQilwZ9u4SernMNo"
-      );
-    }
+    isMessagingSupported().then((messagingSupported) => {
+      if (messagingSupported) {
+        this._messaging = getMessaging(this._app);
+      }
+    });
   }
 
   get options() {

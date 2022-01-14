@@ -1,4 +1,18 @@
-import firebase from "firebase";
+import {
+  addDoc,
+  collection,
+  deleteDoc,
+  doc,
+  Firestore,
+  getDocs,
+  onSnapshot,
+  query,
+  QueryDocumentSnapshot,
+  Unsubscribe,
+  updateDoc,
+  where,
+  writeBatch,
+} from "firebase/firestore";
 import {
   BaseShoppingList,
   ShoppingList,
@@ -7,18 +21,23 @@ import {
   User,
 } from "../types";
 
-export class ShoppingListAdapter {
-  _db: firebase.firestore.Firestore;
+const collectionName = "shoppinglists";
 
-  constructor(db: firebase.firestore.Firestore) {
+export class ShoppingListAdapter {
+  _db: Firestore;
+
+  constructor(db: Firestore) {
     this._db = db;
   }
 
   async createShoppingList(user: SignedInUser, name: string): Promise<void> {
     try {
-      await this._db
-        .collection("shoppinglists")
-        .add({ owner: user.uid, name, sharedWith: [] });
+      const collectionReference = await collection(this._db, collectionName);
+      await addDoc(collectionReference, {
+        owner: user.uid,
+        name,
+        sharedWith: [],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -26,7 +45,8 @@ export class ShoppingListAdapter {
 
   async removeShoppingList(shoppingList: ShoppingList): Promise<void> {
     try {
-      await this._db.doc(`shoppinglists/${shoppingList.id}`).delete();
+      const documentReference = doc(this._db, collectionName, shoppingList.id);
+      await deleteDoc(documentReference);
     } catch (error) {
       console.log(error);
     }
@@ -36,14 +56,16 @@ export class ShoppingListAdapter {
     shoppingList: ShoppingList
   ): Promise<void> {
     try {
-      const itemsSnapshot = await this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .get();
+      const collectionReference = collection(
+        this._db,
+        collectionName,
+        shoppingList.id,
+        "items"
+      );
+      const docs = await getDocs(collectionReference);
 
-      const batch = this._db.batch();
-
-      itemsSnapshot.forEach((doc) => batch.delete(doc.ref));
-
+      const batch = writeBatch(this._db);
+      docs.forEach((doc) => batch.delete(doc.ref));
       await batch.commit();
     } catch (error) {
       console.log(error);
@@ -55,9 +77,13 @@ export class ShoppingListAdapter {
     itemName: string
   ): Promise<void> {
     try {
-      await this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .add({ name: itemName, checked: false });
+      const collectionReference = collection(
+        this._db,
+        collectionName,
+        shoppingList.id,
+        "items"
+      );
+      await addDoc(collectionReference, { name: itemName, checked: false });
     } catch (error) {
       console.log(error);
     }
@@ -68,9 +94,14 @@ export class ShoppingListAdapter {
     item: ShoppingListItem
   ): Promise<void> {
     try {
-      await this._db
-        .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
-        .delete();
+      const documentReference = doc(
+        this._db,
+        collectionName,
+        shoppingList.id,
+        "items",
+        item.id
+      );
+      await deleteDoc(documentReference);
     } catch (error) {
       console.log(error);
     }
@@ -81,7 +112,8 @@ export class ShoppingListAdapter {
     name: string
   ): Promise<void> {
     try {
-      await this._db.doc(`shoppinglists/${shoppingList.id}`).update({ name });
+      const documentReference = doc(this._db, collectionName, shoppingList.id);
+      await updateDoc(documentReference, { name });
     } catch (error) {
       console.log(error);
     }
@@ -93,10 +125,8 @@ export class ShoppingListAdapter {
   ): Promise<void> {
     try {
       const userIds = users.map((u) => u.id);
-
-      await this._db
-        .doc(`shoppinglists/${shoppingList.id}`)
-        .update({ sharedWith: userIds });
+      const documentReference = doc(this._db, collectionName, shoppingList.id);
+      await updateDoc(documentReference, { sharedWith: userIds });
     } catch (error) {
       console.log(error);
     }
@@ -106,12 +136,18 @@ export class ShoppingListAdapter {
     shoppingList: ShoppingList,
     item: ShoppingListItem
   ): Promise<void> {
-    const updatedItem = { name: item.name, checked: item.checked };
-
     try {
-      await this._db
-        .doc(`shoppinglists/${shoppingList.id}/items/${item.id}`)
-        .update(updatedItem);
+      const documentReference = doc(
+        this._db,
+        collectionName,
+        shoppingList.id,
+        "items",
+        item.id
+      );
+      await updateDoc(documentReference, {
+        name: item.name,
+        checked: item.checked,
+      });
     } catch (error) {
       console.log(error);
     }
@@ -120,15 +156,18 @@ export class ShoppingListAdapter {
   ownedShoppingListListener(
     user: SignedInUser,
     callback: (shoppingLists: Array<BaseShoppingList>) => void
-  ): firebase.Unsubscribe | undefined {
+  ): Unsubscribe | undefined {
     try {
-      return this._db
-        .collection("shoppinglists")
-        .where("owner", "==", user.uid)
-        .onSnapshot((snapshot) => {
-          const shoppingLists = snapshot.docs.map(mapShoppingList);
-          callback(shoppingLists);
-        });
+      const collectionReference = collection(this._db, collectionName);
+      const dataQuery = query(
+        collectionReference,
+        where("owner", "==", user.uid)
+      );
+
+      return onSnapshot(dataQuery, (snapshot) => {
+        const shoppingLists = snapshot.docs.map(mapShoppingList);
+        callback(shoppingLists);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -137,15 +176,18 @@ export class ShoppingListAdapter {
   sharedShoppingListsListener(
     user: SignedInUser,
     callback: (shoppingLists: Array<BaseShoppingList>) => void
-  ): firebase.Unsubscribe | undefined {
+  ): Unsubscribe | undefined {
     try {
-      return this._db
-        .collection("shoppinglists")
-        .where("sharedWith", "array-contains", user.uid)
-        .onSnapshot((snapshot) => {
-          const shoppingLists = snapshot.docs.map(mapShoppingList);
-          callback(shoppingLists);
-        });
+      const collectionReference = collection(this._db, collectionName);
+      const dataQuery = query(
+        collectionReference,
+        where("sharedWith", "array-contains", user.uid)
+      );
+
+      return onSnapshot(dataQuery, (snapshot) => {
+        const shoppingLists = snapshot.docs.map(mapShoppingList);
+        callback(shoppingLists);
+      });
     } catch (error) {
       console.log(error);
     }
@@ -154,23 +196,26 @@ export class ShoppingListAdapter {
   itemListener(
     shoppingList: ShoppingList,
     callback: (items: Array<ShoppingListItem>) => void
-  ): firebase.Unsubscribe | undefined {
+  ): Unsubscribe | undefined {
     try {
-      return this._db
-        .collection(`shoppinglists/${shoppingList.id}/items`)
-        .onSnapshot((snapshot) => {
-          const items = snapshot.docs.map(mapShoppingListItem);
-          callback(items);
-        });
+      const collectionReference = collection(
+        this._db,
+        collectionName,
+        shoppingList.id,
+        "items"
+      );
+
+      return onSnapshot(collectionReference, (snapshot) => {
+        const items = snapshot.docs.map(mapShoppingListItem);
+        callback(items);
+      });
     } catch (error) {
       console.log(error);
     }
   }
 }
 
-function mapShoppingList(
-  document: firebase.firestore.QueryDocumentSnapshot
-): BaseShoppingList {
+function mapShoppingList(document: QueryDocumentSnapshot): BaseShoppingList {
   return {
     id: document.id,
     name: document.data().name,
@@ -180,7 +225,7 @@ function mapShoppingList(
 }
 
 function mapShoppingListItem(
-  document: firebase.firestore.QueryDocumentSnapshot
+  document: QueryDocumentSnapshot
 ): ShoppingListItem {
   return {
     id: document.id,

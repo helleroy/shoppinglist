@@ -1,21 +1,16 @@
-import firebase from "firebase";
+import { Messaging, getToken, onMessage } from "firebase/messaging";
 import { Message } from "../types";
 
 export class MessagingAdapter {
-  _messaging: firebase.messaging.Messaging | null;
-  _projectId: string;
+  _messaging: Messaging | null;
 
-  constructor(
-    messaging: firebase.messaging.Messaging | null,
-    projectId: string
-  ) {
+  constructor(messaging: Messaging | null) {
     this._messaging = messaging;
-    this._projectId = projectId;
   }
 
   onMessage(callback: (message: Message) => void): void {
     if (this._messaging) {
-      this._messaging.onMessage((payload: any) => {
+      onMessage(this._messaging, (payload: any) => {
         console.log("Received message", payload);
         callback(payload);
       });
@@ -33,7 +28,10 @@ export class MessagingAdapter {
   async getToken(): Promise<string | void> {
     try {
       if (this._messaging) {
-        const currentToken = await this._messaging.getToken();
+        const currentToken = await getToken(this._messaging, {
+          vapidKey:
+            "BIlIsfvbhieh8dLuLLmgnEd852fZc-0x7A8hffbsAz_1zB92yxKVj4uyp-ZyB2FZ3hY98h4eQilwZ9u4SernMNo",
+        });
 
         if (currentToken) {
           return currentToken;
@@ -43,17 +41,6 @@ export class MessagingAdapter {
       }
     } catch (error) {
       console.log("Failed to retrieve token", error);
-    }
-  }
-
-  listenForRefreshedToken(callback: (token: string) => void): void {
-    if (this._messaging) {
-      this._messaging.onTokenRefresh(async () => {
-        let token = await this.getToken();
-        if (token) {
-          callback(token);
-        }
-      });
     }
   }
 }

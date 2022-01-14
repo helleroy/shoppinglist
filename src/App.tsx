@@ -59,7 +59,6 @@ class App extends Component<Props, State> {
           );
 
           messagingService.requestPermission(user);
-          messagingService.listenForRefreshedToken(user);
           messagingService.onMessage((message: Message) => {
             this.setState({ notification: message });
           });
@@ -97,9 +96,8 @@ class App extends Component<Props, State> {
   };
 
   updateShoppingLists = (updatedShoppingLists: Array<ShoppingList>) => {
-    const shoppingLists = listService.restoreShoppingListOrder(
-      updatedShoppingLists
-    );
+    const shoppingLists =
+      listService.restoreShoppingListOrder(updatedShoppingLists);
 
     this.setState({ shoppingLists });
   };

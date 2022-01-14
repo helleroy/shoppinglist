@@ -12,15 +12,15 @@
     "build": "npm install"
   },
   "dependencies": {
-    "firebase-admin": "^8.10.0",
+    "firebase-admin": "^10.0.1",
     "firebase-functions": "^3.6.0",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-plugin-promise": "^4.2.1"
+    "eslint": "^8.6.0",
+    "eslint-plugin-promise": "^6.0.0"
   },
   "engines": {
-    "node": "8"
+    "node": "14"
   }
 }

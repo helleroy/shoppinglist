@@ -1,10 +1,10 @@
-import firebase from "firebase";
+import { Unsubscribe } from "firebase/auth";
 import { AuthenticationAdapter } from "../adapters/AuthenticationAdapter";
 import { SignedInUser } from "../types";
 
 export class AuthenticationService {
   _authenticationAdapter: AuthenticationAdapter;
-  _authStateChangedUnsubscribe: firebase.Unsubscribe | undefined;
+  _authStateChangedUnsubscribe: Unsubscribe | undefined;
 
   constructor(authenticationAdapter: AuthenticationAdapter) {
     this._authenticationAdapter = authenticationAdapter;
@@ -17,9 +17,8 @@ export class AuthenticationService {
   handleAuthStateChanged(callback: (user: SignedInUser | null) => any): void {
     this.unsubscribeAuthStateChangedListener();
 
-    this._authStateChangedUnsubscribe = this._authenticationAdapter.authStateChangedListener(
-      callback
-    );
+    this._authStateChangedUnsubscribe =
+      this._authenticationAdapter.authStateChangedListener(callback);
   }
 
   async signOut(): Promise<void> {

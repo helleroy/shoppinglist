@@ -1,4 +1,4 @@
-import firebase from "firebase";
+import { Unsubscribe } from "firebase/firestore";
 import _ from "lodash";
 import { addToList, removeFromList } from "../utils/list";
 import { ShoppingListAdapter } from "../adapters/ShoppingListAdapter";
@@ -18,9 +18,9 @@ export class ShoppingListService {
   _shoppingListAdapter: ShoppingListAdapter;
   _userAdapter: UserAdapter;
   _localStorageAdapter: BrowserLocalStorageAdapter;
-  _ownedShoppingListUnsubscribe: firebase.Unsubscribe | undefined;
-  _sharedShoppingListUnsubscribe: firebase.Unsubscribe | undefined;
-  _itemUnsubscribe: { [id: string]: firebase.Unsubscribe | undefined };
+  _ownedShoppingListUnsubscribe: Unsubscribe | undefined;
+  _sharedShoppingListUnsubscribe: Unsubscribe | undefined;
+  _itemUnsubscribe: { [id: string]: Unsubscribe | undefined };
 
   constructor(
     shoppingListAdapter: ShoppingListAdapter,
@@ -200,15 +200,16 @@ export class ShoppingListService {
     this.unsubscribeOwnedShoppingListListener();
 
     try {
-      this._ownedShoppingListUnsubscribe = this._shoppingListAdapter.ownedShoppingListListener(
-        user,
-        async (shoppingLists) => {
-          const shoppingListsWithUsers = await this.populateUserData(
-            shoppingLists
-          );
-          callback(shoppingListsWithUsers);
-        }
-      );
+      this._ownedShoppingListUnsubscribe =
+        this._shoppingListAdapter.ownedShoppingListListener(
+          user,
+          async (shoppingLists) => {
+            const shoppingListsWithUsers = await this.populateUserData(
+              shoppingLists
+            );
+            callback(shoppingListsWithUsers);
+          }
+        );
     } catch (error) {
       console.log(error);
     }
@@ -221,15 +222,16 @@ export class ShoppingListService {
     this.unsubscribeSharedShoppingListListener();
 
     try {
-      this._sharedShoppingListUnsubscribe = this._shoppingListAdapter.sharedShoppingListsListener(
-        user,
-        async (shoppingLists) => {
-          const shoppingListsWithUsers = await this.populateUserData(
-            shoppingLists
-          );
-          callback(shoppingListsWithUsers);
-        }
-      );
+      this._sharedShoppingListUnsubscribe =
+        this._shoppingListAdapter.sharedShoppingListsListener(
+          user,
+          async (shoppingLists) => {
+            const shoppingListsWithUsers = await this.populateUserData(
+              shoppingLists
+            );
+            callback(shoppingListsWithUsers);
+          }
+        );
     } catch (error) {
       console.log(error);
     }
@@ -242,9 +244,8 @@ export class ShoppingListService {
     this.unsubscribeItemListener(shoppingList);
 
     try {
-      this._itemUnsubscribe[
-        shoppingList.id
-      ] = this._shoppingListAdapter.itemListener(shoppingList, callback);
+      this._itemUnsubscribe[shoppingList.id] =
+        this._shoppingListAdapter.itemListener(shoppingList, callback);
     } catch (error) {
       console.log(error);
     }

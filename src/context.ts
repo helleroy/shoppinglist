@@ -1,4 +1,4 @@
-import { FirebaseApp } from "./firebase/app";
+import { Firebase } from "./firebase/app";
 import { AuthenticationService } from "./services/AuthenticationService";
 import { ShoppingListService } from "./services/ShoppingListService";
 import { UserService } from "./services/UserService";
@@ -19,7 +19,7 @@ const firebaseOptions = {
   appId: "1:653122939571:web:b2d611dd62cf7a00299ec6",
 };
 
-const firebaseApp = new FirebaseApp(firebaseOptions);
+const firebaseApp = new Firebase(firebaseOptions);
 
 const shoppingListAdapter = new ShoppingListAdapter(firebaseApp.db);
 
@@ -31,10 +31,7 @@ const browserLocalStorageAdapter = new BrowserLocalStorageAdapter(
 
 const authenticationAdapter = new AuthenticationAdapter(firebaseApp.auth);
 
-const messagingAdapter = new MessagingAdapter(
-  firebaseApp.messaging,
-  firebaseApp.options.projectId
-);
+const messagingAdapter = new MessagingAdapter(firebaseApp.messaging);
 
 export const messagingService = new MessagingService(
   messagingAdapter,
