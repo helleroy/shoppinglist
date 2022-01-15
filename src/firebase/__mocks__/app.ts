@@ -1,4 +1,4 @@
-export class FirebaseApp {
+export class Firebase {
   _options: {};
   _app: {};
   _db: {};
@@ -9,7 +9,9 @@ export class FirebaseApp {
     this._options = {};
     this._app = {};
     this._db = {};
-    this._auth = { onAuthStateChanged: () => {} };
+    this._auth = {
+      onAuthStateChanged: () => {},
+    };
     this._messaging = {};
   }
 

@@ -1,10 +1,10 @@
-import { FirebaseApp, FirebaseOptions, initializeApp } from "firebase/app";
+import { FirebaseApp, initializeApp } from "firebase/app";
 import { Firestore, getFirestore } from "firebase/firestore";
 import { Auth, getAuth } from "firebase/auth";
 import {
-  Messaging,
   getMessaging,
   isSupported as isMessagingSupported,
+  Messaging,
 } from "firebase/messaging";
 
 interface Options {
@@ -18,7 +18,7 @@ interface Options {
 }
 
 export class Firebase {
-  _options: FirebaseOptions;
+  _options: Options;
   _app: FirebaseApp;
   _db: Firestore;
   _auth: Auth;
