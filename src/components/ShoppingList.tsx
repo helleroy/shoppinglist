@@ -8,7 +8,6 @@ import React, {
 import { listService } from "../context";
 import ShoppingListItem from "./ShoppingListItem";
 import ShoppingListHeader from "./ShoppingListHeader";
-import ShareShoppingList from "./ShareShoppingList";
 import {
   ShoppingList as ShoppingListType,
   ShoppingListItem as ShoppingListItemType,
@@ -60,8 +59,6 @@ function ShoppingList(props: Props) {
 
     setListComplete(listComplete && items.length !== 0);
   }, [items]);
-
-  const canDelete = list.owner && signedInUser.uid === list.owner.id;
 
   const moveLeft = moveListLeft
     ? () => {
@@ -121,21 +118,6 @@ function ShoppingList(props: Props) {
           </div>
         )}
       </main>
-      <footer className="card py-0 border-0">
-        <div className="card-body row justify-content-between py-0">
-          <ShareShoppingList signedInUser={signedInUser} list={list} />
-          {canDelete && (
-            <div className="col-sm-3 mt-3">
-              <button
-                className="btn btn-outline-danger col-sm"
-                onClick={() => listService.removeShoppingList(list)}
-              >
-                Delete list
-              </button>
-            </div>
-          )}
-        </div>
-      </footer>
     </div>
   );
 }

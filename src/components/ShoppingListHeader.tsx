@@ -3,6 +3,7 @@ import SharedUser from "./SharedUser";
 import { listService } from "../context";
 import Collapsible from "react-collapsible";
 import { ShoppingList, SignedInUser } from "../types";
+import ShareShoppingList from "./ShareShoppingList";
 
 interface Props {
   list: ShoppingList;
@@ -42,6 +43,8 @@ function ShoppingListHeader(props: Props) {
 
   const [editingListName, setEditingListName] = useState(false);
   const [showListDetails, setShowListDetails] = useState(false);
+
+  const canDelete = list.owner && signedInUser.uid === list.owner.id;
 
   return (
     <div className="row justify-content-between">
@@ -109,6 +112,19 @@ function ShoppingListHeader(props: Props) {
               </div>
             </div>
           )}
+          <div className="mt-3">
+            <ShareShoppingList signedInUser={signedInUser} list={list} />
+            {canDelete && (
+              <div className="mt-3">
+                <button
+                  className="btn btn-outline-danger col-sm"
+                  onClick={() => listService.removeShoppingList(list)}
+                >
+                  Delete list
+                </button>
+              </div>
+            )}
+          </div>
         </Collapsible>
       </div>
       <div className="d-flex flex-column col-2 justify-content-between align-items-center">

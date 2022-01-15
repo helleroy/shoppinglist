@@ -31,22 +31,20 @@ function ShareShoppingList(props: Props) {
   };
 
   return (
-    <div className="col-sm-6 mt-3">
-      <form onSubmit={handleNewSharedUser} className="input-group">
-        <input
-          ref={emailInput}
-          type="email"
-          name="email"
-          placeholder="User email"
-          className="form-control"
-        />
-        <div className="input-group-append">
-          <button type="submit" className="btn btn-secondary">
-            Share
-          </button>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={handleNewSharedUser} className="input-group">
+      <input
+        ref={emailInput}
+        type="email"
+        name="email"
+        placeholder="User email"
+        className="form-control"
+      />
+      <div className="input-group-append">
+        <button type="submit" className="btn btn-secondary">
+          Share
+        </button>
+      </div>
+    </form>
   );
 }
 
