@@ -80,6 +80,16 @@ export class ShoppingListService {
     }
   }
 
+  async clearShoppingList(shoppingList: ShoppingList): Promise<void> {
+    try {
+      await this._shoppingListAdapter.removeAllItemsFromShoppingList(
+        shoppingList
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateListName(
     shoppingList: ShoppingList,
     name: string

@@ -42,6 +42,7 @@ function ShoppingList(props: Props) {
   const { list, signedInUser, moveListLeft, moveListRight } = props;
 
   const [items, setItems] = useState<Array<ShoppingListItemType>>([]);
+  const [listComplete, setListComplete] = useState<boolean>(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -51,6 +52,14 @@ function ShoppingList(props: Props) {
       listService.unsubscribeItemListener(list);
     };
   }, [list]);
+
+  useEffect(() => {
+    const listComplete = items.reduce((previous, current) => {
+      return previous && current.checked;
+    }, true);
+
+    setListComplete(listComplete && items.length !== 0);
+  }, [items]);
 
   const canDelete = list.owner && signedInUser.uid === list.owner.id;
 
@@ -101,6 +110,16 @@ function ShoppingList(props: Props) {
             </div>
           </div>
         </form>
+        {listComplete && (
+          <div className="mt-3">
+            <button
+              className="btn btn-outline-danger col-sm"
+              onClick={() => listService.clearShoppingList(list)}
+            >
+              Clear list
+            </button>
+          </div>
+        )}
       </main>
       <footer className="card py-0 border-0">
         <div className="card-body row justify-content-between py-0">
