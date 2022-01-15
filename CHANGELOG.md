@@ -1,35 +1,36 @@
-## [1.4.2](https://github.com/helleroy/shoppinglist/compare/v1.4.1...v1.4.2) (2020-04-05)
-
+## [1.4.3](https://github.com/helleroy/shoppinglist/compare/v1.4.2...v1.4.3) (2022-01-15)
 
 ### Bug Fixes
 
-* update dialog when service worker finds an update ([a346b89](https://github.com/helleroy/shoppinglist/commit/a346b891d79ba8401e6f8c0d301fa08b4f01112a))
+- bi-annual dependency bump ([df7a898](https://github.com/helleroy/shoppinglist/commit/df7a898d7224d3a3e2f48b546a75163531e09d55))
+
+## [1.4.2](https://github.com/helleroy/shoppinglist/compare/v1.4.1...v1.4.2) (2020-04-05)
+
+### Bug Fixes
+
+- update dialog when service worker finds an update ([a346b89](https://github.com/helleroy/shoppinglist/commit/a346b891d79ba8401e6f8c0d301fa08b4f01112a))
 
 ## [1.4.1](https://github.com/helleroy/shoppinglist/compare/v1.4.0...v1.4.1) (2020-04-01)
 
-
 ### Bug Fixes
 
-* scroll to focused list element when sorting ([1c2b7d4](https://github.com/helleroy/shoppinglist/commit/1c2b7d4cb51fc9467901be51b3584404b9e083ae))
+- scroll to focused list element when sorting ([1c2b7d4](https://github.com/helleroy/shoppinglist/commit/1c2b7d4cb51fc9467901be51b3584404b9e083ae))
 
 # [1.4.0](https://github.com/helleroy/shoppinglist/compare/v1.3.0...v1.4.0) (2020-03-31)
 
-
 ### Bug Fixes
 
-* ensure scroll indicator is below the lists ([2370f44](https://github.com/helleroy/shoppinglist/commit/2370f44952180daaff2e959d2b6d78f85cacc8a4))
-
+- ensure scroll indicator is below the lists ([2370f44](https://github.com/helleroy/shoppinglist/commit/2370f44952180daaff2e959d2b6d78f85cacc8a4))
 
 ### Features
 
-* buttons to sort list order ([81b3dcf](https://github.com/helleroy/shoppinglist/commit/81b3dcf4fe4251477cbc37427495190deef1ad37))
+- buttons to sort list order ([81b3dcf](https://github.com/helleroy/shoppinglist/commit/81b3dcf4fe4251477cbc37427495190deef1ad37))
 
 # [1.3.0](https://github.com/helleroy/shoppinglist/compare/v1.2.9...v1.3.0) (2020-03-25)
 
-
 ### Features
 
-* horizontal swipe to switch between lists ([b09532f](https://github.com/helleroy/shoppinglist/commit/b09532f8b326777c33b0988f91cd581860488fde))
+- horizontal swipe to switch between lists ([b09532f](https://github.com/helleroy/shoppinglist/commit/b09532f8b326777c33b0988f91cd581860488fde))
 
 ## [1.2.9](https://github.com/helleroy/shoppinglist/compare/v1.2.8...v1.2.9) (2020-03-21)
 
