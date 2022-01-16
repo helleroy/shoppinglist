@@ -4,10 +4,11 @@ import { SignedInUser } from "../types";
 
 interface Props {
   user: SignedInUser;
+  onSubmit?: () => void;
 }
 
 function CreateShoppingList(props: Props) {
-  const { user } = props;
+  const { user, onSubmit } = props;
 
   const listNameInput = useRef<HTMLInputElement>(null);
 
@@ -22,6 +23,8 @@ function CreateShoppingList(props: Props) {
       if (listNameInput && listNameInput.current) {
         listNameInput.current.blur();
       }
+
+      onSubmit?.();
 
       await listService.createShoppingList(user, name);
     }

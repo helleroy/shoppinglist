@@ -10,6 +10,11 @@
   border-radius: 1rem;
 }
 
+.button-square {
+  height: 2.5rem;
+  width: 2.5rem;
+}
+
 .clickable {
   cursor: pointer;
 }
