@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/helleroy/shoppinglist/compare/v1.4.3...v1.5.0) (2022-01-16)
+
+### Bug Fixes
+
+- hide create list input field in a collapsible ([19d1820](https://github.com/helleroy/shoppinglist/commit/19d1820e46e7b9b782d648a7d4eec4748bf1fd5a))
+- hide sign out button in a collapsible ([8616c26](https://github.com/helleroy/shoppinglist/commit/8616c264d95211567a1bac32479aed30503bc6af))
+- move share and delete list into the hidden header ([cc3a014](https://github.com/helleroy/shoppinglist/commit/cc3a0142c9c00e110f1c128fe2b965bee04acbb5))
+
+### Features
+
+- option to clear the list if all items are complete ([7eedc91](https://github.com/helleroy/shoppinglist/commit/7eedc91bd08768353983dd24c96fca15a3f526a1))
+
 ## [1.4.3](https://github.com/helleroy/shoppinglist/compare/v1.4.2...v1.4.3) (2022-01-15)
 
 ### Bug Fixes
