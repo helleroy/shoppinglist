@@ -61,6 +61,13 @@ function registerValidSW(swUrl: string, config: Config) {
   navigator.serviceWorker
     .register(swUrl)
     .then((registration) => {
+      // Check if a new version is already waiting to take control to ensure updates on iOS
+      // https://stackoverflow.com/questions/55581719/reactjs-pwa-not-updating-on-ios
+      if (registration.waiting) {
+        if (config.onUpdate) {
+          config.onUpdate(registration);
+        }
+      }
       registration.onupdatefound = () => {
         const installingWorker = registration.installing;
         if (installingWorker) {
