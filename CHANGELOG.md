@@ -1,3 +1,9 @@
+## [1.5.1](https://github.com/helleroy/shoppinglist/compare/v1.5.0...v1.5.1) (2022-01-19)
+
+### Bug Fixes
+
+- attempt to force sw update on iOS ([929d8b1](https://github.com/helleroy/shoppinglist/commit/929d8b1c2e6148f8cc6e354a1eb34a357555bb2d))
+
 # [1.5.0](https://github.com/helleroy/shoppinglist/compare/v1.4.3...v1.5.0) (2022-01-16)
 
 ### Bug Fixes
