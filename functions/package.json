@@ -12,8 +12,8 @@
     "build": "npm install"
   },
   "dependencies": {
-    "firebase-admin": "^10.0.1",
-    "firebase-functions": "^3.6.0",
+    "firebase-admin": "^11.4.1",
+    "firebase-functions": "^3.24.1",
     "lodash": "^4.17.15"
   },
   "devDependencies": {
